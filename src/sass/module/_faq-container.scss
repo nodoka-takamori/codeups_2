@@ -1,0 +1,10 @@
+@use "global" as *;
+
+.faq-container {
+  width: 100%;
+  display: grid;
+  gap: rem(46);
+  @include mq("md") {
+    gap: rem(43);
+  }
+}

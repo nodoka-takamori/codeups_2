@@ -1,0 +1,238 @@
+@use "global" as *;
+
+
+.aside__title-line {
+  align-items: center;
+  display: flex;
+}
+.aside__title-line::before {
+  content: "";
+  border-left: 8px solid $blue;
+  height: rem(50);
+}
+.aside__title {
+  position: relative;
+  font-family: $base-font-family;
+  font-size: rem(24);
+  font-weight: $regular;
+  color: $black;
+  padding-left: rem(17);
+  display: flex;
+  align-items: center;
+}
+
+.aside__title::before {
+  content: "";
+  width: rem(50);
+  height: rem(50);
+  margin-right: rem(8);
+  background-size: contain;
+  background: url(../../assets/images/common/giji_black.png);
+}
+
+.aside__container {
+  margin-top: rem(23);
+  display: flex;
+  flex-direction: column;
+}
+.aside__article-container{
+  gap: rem(23);
+    @include mq("md") {
+      gap: rem(22);
+    }
+}
+
+.aside__article-block {
+  width: 100%;
+  display: flex;
+  gap: rem(17);
+  padding: rem(17) rem(17);
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.25);
+}
+
+.aside__article-photo{
+  overflow: hidden;
+    z-index: 1;
+    position: relative;
+    object-fit: cover;
+    height: auto;
+    width: 52%;
+}
+.aside__article-photo img{
+  aspect-ratio: 121 / 90;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+
+.aside__article-meta {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.aside__article-days {
+  font-family: $english-font-family;
+  font-size: rem(12);
+  font-weight: $regular;
+}
+.aside__article-title {
+  margin-top: rem(2);
+  font-family: $base-font-family;
+  font-size: rem(16);
+  font-weight: $medium;
+  color: $black;
+  text-align: center;
+  display: flex;
+}
+
+//////////////
+.aside__voice {
+  margin-top: rem(84);
+  @include mq("md") {
+    margin-top: rem(85);
+  }
+}
+.aside__voice-container {
+  margin-top: rem(23);
+}
+.aside__vice-meta {
+  margin-top: rem(14);
+}
+.aside__voice-photo {
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+  aspect-ratio: 294/218;
+}
+
+.aside__voice-photo img {
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+}
+.aside__voice-age {
+  font-family: $base-font-family;
+  font-size: rem(12);
+  font-weight: $regular;
+}
+
+.aside__voice-title {
+  font-family: $base-font-family;
+  font-size: rem(24);
+  font-weight: $medium;
+  margin-top: rem(10);
+}
+.aside__voice-button {
+  text-align: center;
+  margin-top: rem(44);
+  @include mq("md") {
+    margin-top: rem(41);
+  }
+}
+/////////////
+.aside__campaign {
+  margin-top: rem(86);
+}
+.aside__campaign-container {
+  margin-top: rem(23);
+  @include mq("md") {
+    margin-top: rem(25);
+  }
+}
+.aside__campaign-contents {
+  display: flex;
+  flex-direction: column;
+  gap: rem(44);
+  @include mq("md") {
+    gap: rem(33);
+  }
+}
+.aside__campaign-button {
+  text-align: center;
+  margin-top: rem(43);
+  @include mq("md") {
+    margin-top: rem(36);
+  }
+}
+/////////////
+.aside__archive {
+  margin-top: rem(85);
+  @include mq("md") {
+    margin-top: rem(86);
+  }
+}
+.aside__archive-container {
+  margin-top: rem(28);
+  @include mq("md") {
+    margin-top: rem(19);
+  }
+}
+
+.aside__archive-list {
+  color: $blue;
+  font-family: $base-font-family;
+  font-size: rem(24);
+  font-weight: $regular;
+}
+
+.aside__archive-item {
+  position: relative;
+  padding-left: rem(31);
+}
+.aside__archive-item:not(:first-child) {
+  margin-top: rem(4);
+}
+.aside__archive-item::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: rem(4);
+  top: rem(12);
+  border-style: solid;
+  border-top: rem(12) solid transparent;
+  border-bottom: rem(12) solid transparent;
+  border-left: rem(17) solid $blue; /*右向きの三角*/
+  border-right: 0;
+  transition: transform 0.3s ease; /* スムーズな変化 */
+}
+
+/* 開いているとき：右向き矢印 ▶︎ */
+.aside__archive-item.open::before {
+  transform: rotate(90deg); /* 矢印を回転  */
+}
+
+.aside__archive-item--month::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: rem(29);
+  top: rem(10);
+  border-style: solid;
+  border-top: rem(12) solid transparent;
+  border-bottom: rem(12) solid transparent;
+  border-left: rem(17) solid $blue;
+  border-right: 0;
+}
+
+/* トグルが常に開いた状態でスタート */
+.aside__archive-item--month {
+  max-height: 500px;/* 月別項目が常に表示される初期状態 */
+  opacity: 1;
+  overflow: visible;
+  padding-left: rem(55);
+  transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+/* クラス 'show' が外れると非表示 */
+.aside__archive-item--month:not(.show) {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}

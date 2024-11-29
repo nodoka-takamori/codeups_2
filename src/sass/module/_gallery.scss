@@ -1,0 +1,67 @@
+@use "global" as *;
+.gallery__inner {
+  max-width: rem(600);
+  width: 100%;
+  position: relative;
+  @include mq("md") {
+    max-width: $inner;
+  }
+}
+.gallery__inner::before {
+  @include mq("md") {
+    position: absolute;
+    content: "";
+    background: url(../../assets/images/common/decoration_5.png) center center / contain no-repeat;
+    right: calc(50% - min(48.5vw, rem(641)));
+    top: rem(-70);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+.gallery__photo-container {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+  margin-top: rem(40);
+  @include mq("md") {
+    display: grid;
+    grid-auto-flow: dense;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(11, 1fr);
+    margin-top: rem(78);
+  }
+}
+.gallery__photo {
+  cursor: pointer;
+}
+
+.gallery__photo:nth-child(6n + 1),
+.gallery__photo:nth-child(6n + 6) {
+  grid-column: span 5;
+  grid-row: span 2;
+}
+
+.gallery__photo:nth-child(6n + 1) img,
+.gallery__photo:nth-child(6n + 6) img {
+  aspect-ratio: 492 / 746;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.gallery__photo:nth-child(6n + 2),
+.gallery__photo:nth-child(6n + 3),
+.gallery__photo:nth-child(6n + 4),
+.gallery__photo:nth-child(6n + 5) {
+  grid-column: span 6;
+  grid-row: span 1;
+}
+.gallery__photo:nth-child(6n + 2) img,
+.gallery__photo:nth-child(6n + 3) img,
+.gallery__photo:nth-child(6n + 4) img,
+.gallery__photo:nth-child(6n + 5) img {
+  aspect-ratio: 580 / 369;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}

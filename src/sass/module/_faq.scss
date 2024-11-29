@@ -1,0 +1,110 @@
+@use "global" as *;
+
+.faq__question {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  background-color: $blue;
+  color: $white;
+  font-family: $base-font-family;
+  font-size: rem(16);
+  font-weight: $regular;
+  width: 100%;
+  padding: rem(15);
+  @include mq("md") {
+    font-size: rem(20);
+    padding: rem(24) rem(40);
+  }
+}
+.faq__question.open {
+  border-bottom: 1px solid gray;
+}
+.faq__question::after {
+  content: "";
+  display: inline;
+  width: 18px;
+  height: 11px;
+  background: url(http://agdemo.net/sample/toggle/img/arrow_down.svg) no-repeat
+    center center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  transition: transform 0.2s;
+}
+.faq__question.open::after {
+  transform: rotateZ(180deg);
+  top: 46%;
+}
+.faq__answer {
+  display: block;
+
+  background-color: $white;
+  color: $black;
+  border: 1px solid $blue;
+  width: 100%;
+  padding: rem(24) rem(16);
+  line-height: 1.4;
+  color: $black;
+  font-family: $base-font-family;
+  font-size: rem(16);
+  font-weight: $regular;
+  @include mq("md") {
+    margin-top: rem(16);
+    padding: rem(40);
+  }
+}
+
+.faq__answer.is-close {
+  display: none;
+}
+
+////////////////////
+/* プラスとマイナスのアイコンを作成 */
+
+.faq__question span {
+  position: absolute;
+  right: rem(17);
+  width: rem(30);
+  height: rem(1);
+  top: 45%;
+  background-color: $white;
+  border-radius: 4px;
+  z-index: 5;
+  transition: transform 0.3s ease; /* 回転のトランジション */
+  transform: rotate(180deg); /* ＋ の縦棒 */
+  @include mq("md") {
+    right: rem(44);
+    top: 50%;
+  }
+}
+
+.faq__question span:nth-of-type(2) {
+  position: absolute;
+  right: rem(17);
+  width: rem(30); /* 縦棒の幅（初期は横棒） */
+  height: rem(1);
+  top: 45%;
+  background-color: #fff;
+  border-radius: 4px;
+  z-index: 5;
+  transition: transform 0.3s ease; /* 回転時のアニメーション */
+  transform: rotate(0deg);
+  @include mq("md") {
+    right: rem(44);
+    top: 50%;
+  }
+}
+
+/* アクティブ状態のとき（＋）に変わる */
+.faq__question.close span {
+  transform: rotate(180deg);
+}
+
+.faq__question.close span:nth-of-type(2) {
+  transform: rotate(90deg);
+}

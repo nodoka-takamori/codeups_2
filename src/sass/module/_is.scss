@@ -1,0 +1,17 @@
+@use 'global' as *;
+
+// pcの時改行
+.is-pc {
+  display: none;
+  @include mq("md") {
+    display: block;
+  }
+}
+
+//spの時改行
+.is-sp {
+  display: block;
+  @include mq("md") {
+    display: none;
+  }
+}

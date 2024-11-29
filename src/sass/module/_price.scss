@@ -1,0 +1,135 @@
+@use "global" as *;
+
+.price {
+  background-color: $light-blue;
+  padding-top: rem(75);
+  padding-bottom: rem(84);
+  @include mq("md") {
+    position: relative;
+    padding-top: rem(89);
+    padding-bottom: rem(104);
+  }
+}
+.price::after {
+  @include mq("md") {
+    position: absolute;
+    content: "";
+    width: rem(437);
+    height: rem(201);
+    left: calc(50% - min(48.5vw, rem(620)));
+    bottom: rem(63);
+    z-index: 1;
+    background: url(../../assets/images/common/decoration_5.png) center center /
+      contain no-repeat;
+  }
+}
+
+.price__container {
+  margin-top: rem(29);
+  display: flex;
+  flex-direction: column-reverse;
+  max-width: rem(600);
+  margin-inline: auto;
+  @include mq("md") {
+    margin-top: rem(39);
+    flex-direction: initial;
+    justify-content: space-between;
+    max-width: rem(1080);
+  }
+}
+.price__contents {
+  @include mq("md") {
+    width: 45.72%;
+  }
+}
+.price__lists-items {
+  margin-top: rem(40);
+  @include mq("md") {
+    margin-top: 0;
+  }
+}
+.price__lists-items:not(:first-child) {
+  margin-top: rem(38);
+  @include mq("md") {
+    margin-top: rem(41);
+  }
+}
+
+.price__list {
+  color: $black;
+  font-family: $base-font-family;
+  margin-top: rem(10);
+  @include mq("md") {
+    margin-top: rem(8);
+  }
+}
+
+.price__list-title {
+  font-weight: $bold;
+  font-size: rem(16);
+  line-height: 1.8;
+  border-bottom: 1px solid $blue;
+  @include mq("md") {
+    line-height: 1.6;
+  }
+}
+.price__list-item {
+  display: flex;
+  justify-content: space-between;
+}
+.price__list-item:not(:first-child) {
+  margin-top: rem(7);
+  @include mq("md") {
+    margin-top: rem(8);
+  }
+}
+.price__list-item dt {
+  font-size: rem(14);
+  font-weight: $regular;
+  line-height: calc(24 / 14);
+  margin-right: rem(10);
+  @include mq("md") {
+    font-size: rem(16);
+    line-height: calc(24 / 16);
+  }
+}
+
+.price__list-item dd {
+  font-size: rem(14);
+  font-weight: $regular;
+  line-height: calc(24 / 14);
+  @include mq("md") {
+    font-size: rem(17);
+    line-height: 1.4;
+  }
+}
+
+.price__photo {
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+  aspect-ratio: 345 / 227;
+  @include mq("md") {
+    width: 45.8%;
+    aspect-ratio: 492 / 746;
+    max-width: rem(746);
+    margin-top: rem(-2);
+  }
+}
+
+.price__button {
+  margin-top: rem(39);
+  text-align: center;
+  @include mq("md") {
+    margin-top: rem(78);
+  }
+}
+
+// #price1 {
+//   display: block;
+//   margin-top: rem(-80);
+//   padding-top: rem(80);
+// }

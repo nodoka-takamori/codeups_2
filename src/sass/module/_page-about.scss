@@ -1,0 +1,42 @@
+@use "global" as *;
+.inner.page-about__inner {
+  position: relative;
+  max-width: rem(600);
+  width: 100%;
+  @include mq("md") {
+    max-width: $inner;
+    padding-right: 0;
+      padding-left: 0;
+  }
+}
+
+.page-about__inner::before {
+  position: absolute;
+  content: "";
+  width: rem(120);
+  height: rem(55);
+  left: rem(15);
+  top: rem(-24);
+  background: url(../../assets/images/common/decoration_3.png) center center /
+    contain no-repeat;
+  z-index: -1;
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-150);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+
+.page-about__contact {
+  margin-top: rem(104);
+  @include mq("md") {
+    margin-top: rem(141);
+  }
+}
+.page-about__footer {
+  margin-top: rem(106);
+  @include mq("md") {
+    margin-top: rem(160);
+  }
+}

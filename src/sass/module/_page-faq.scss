@@ -1,0 +1,44 @@
+@use "global" as *;
+.page-faq {
+  position: relative;
+}
+.page-faq::before {
+  position: absolute;
+  content: "";
+  width: rem(120);
+  height: rem(55);
+  left: rem(15);
+  top: rem(-24);
+  background: url(../../assets/images/common/decoration_3.png) center center /
+    contain no-repeat;
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-70);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+.inner.page-faq__inner {
+  width: 100%;
+  max-width: rem(600);
+  margin-inline: auto;
+ 
+  @include mq("md") {
+    max-width: rem(700);
+    padding-right: 0;
+      padding-left: 0;
+  }
+}
+
+.page-faq__contact {
+  margin-top: rem(108);
+  @include mq("md") {
+    margin-top: rem(141);
+  }
+}
+.page-faq__footer {
+  margin-top: rem(100);
+  @include mq("md") {
+    margin-top: rem(160);
+  }
+}

@@ -1,0 +1,45 @@
+@use "global" as *;
+
+.voice {
+  position: relative;
+}
+
+.voice::before {
+  display: none;
+  @include mq("md") {
+    display: block;
+    position: absolute;
+    content: "";
+    width: rem(301);
+    height: rem(138);
+    left: calc(50% - min(48.5vw, rem(620)));
+    top: rem(-107);
+    background: url(../../assets/images/common/decoration_3.png) center center /
+      contain no-repeat;
+  }
+}
+
+.voice::after {
+  display: none;
+  @include mq("md") {
+    display: block;
+    position: absolute;
+    content: "";
+    width: rem(71);
+    height: rem(162);
+    right: calc(50% - min(48.5vw, rem(540)));
+    bottom: rem(-74);
+    background: url(../../assets/images/common/decoration_4.png) center center /
+      contain no-repeat;
+  }
+}
+
+
+
+.voice__button {
+  text-align: center;
+  margin-top: rem(77);
+  @include mq("md") {
+    margin-top: rem(77);
+  }
+}

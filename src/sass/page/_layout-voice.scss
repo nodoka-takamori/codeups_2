@@ -1,0 +1,16 @@
+@use 'global' as *;
+
+.layout-voice {
+  margin-top: rem(50);
+  position: relative;
+  @include mq("md") {
+    margin-top: rem(150);
+  }
+}
+
+.layout-voice__cards{
+  margin-top: rem(38);
+  @include mq("md") {
+    margin-top: rem(39);
+  }
+}

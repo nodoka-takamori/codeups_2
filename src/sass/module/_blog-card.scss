@@ -1,0 +1,83 @@
+@use "global" as *;
+
+.blog-card {
+  position: relative;
+  padding: rem(16) rem(16) rem(22) rem(16);
+  background-color: $white;
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.25);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.blog-card__img{
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+  transition: transform 0.8s;
+}
+@include mq("md") {
+  .blog-card:hover > figure > img {
+    transform: scale(1.2);
+  }
+}
+
+.blog-card__img img {
+  aspect-ratio: 301 / 201;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+  @include mq("md") {
+    transition: transform 0.8s;
+  }
+}
+.blog-card__img .noimage{
+  overflow: hidden;
+    z-index: 1;
+    position: relative;
+    object-fit: contain;
+    height: auto;
+    width: 100%;
+    transition: transform 0.8s;
+}
+
+
+.blog-card__body {
+  margin-top: rem(17);
+  display: flex;
+  flex-direction: column;
+  @include mq("md") {
+    margin-top: rem(17);
+  }
+}
+.blog-card__meta {
+  flex: 1;
+}
+
+.blog-card__meta time {
+  font-family: $english-font-family;
+  font-size: rem(12);
+  font-weight: $regular;
+  line-height: calc(12 / 18);
+}
+
+.blog-card__title {
+  font-size: rem(16);
+  font-weight: $medium;
+  line-height: 1.8;
+  border-bottom: 1px solid $blue;
+}
+.blog-card__text {
+  margin-top: rem(9);
+  font-size: rem(16);
+  font-weight: $regular;
+  line-height: 1.5;
+  @include mq("md") {
+    margin-top: rem(7);
+  }
+}

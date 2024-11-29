@@ -1,0 +1,26 @@
+@use 'global' as *;
+
+.custom_widget {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: rem(40) rem(40);
+}
+
+.custom_widget li{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    font-size: rem(16);
+    font-weight: bold;
+}
+.custom_widget li a{
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    justify-content: center;
+}
+
+.ios-ui-select div{
+    padding: 0;
+}

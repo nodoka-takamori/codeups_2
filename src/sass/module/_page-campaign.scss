@@ -1,0 +1,50 @@
+@use "global" as *;
+
+.page-campaign {
+  position: relative;
+}
+.page-campaign::before {
+  position: absolute;
+  content: "";
+  width: rem(120);
+  height: rem(55);
+  left: rem(15);
+  top: rem(-24);
+  background: url(../../assets/images/common/decoration_3.png) center center /
+    contain no-repeat;
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-70);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+
+.page-campaign__cards {
+  margin-top: rem(42);
+  @include mq("md") {
+    margin-top: rem(39);
+  }
+}
+
+
+.page-campaign__pagination {
+  margin-top: rem(80);
+  @include mq("md") {
+    margin-top: rem(75);
+  }
+}
+
+
+.page-campaign__contact {
+  margin-top: rem(107);
+  @include mq("md") {
+    margin-top: rem(142);
+  }
+}
+.page-campaign__footer {
+  margin-top: rem(104);
+  @include mq("md") {
+    margin-top: rem(160);
+  }
+}

@@ -1,0 +1,46 @@
+@use "global" as *;
+
+.page-thanks {
+  position: relative;
+}
+
+.page-thanks::before {
+  position: absolute;
+  content: "";
+  width: rem(120);
+  height: rem(55);
+  left: rem(15);
+  top: rem(-24);
+  background: url(../../assets/images/common/decoration_3.png) center center /
+    contain no-repeat;
+  z-index: -1;
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-66);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+
+.page-thanks__text-wrap {
+  color: $black;
+  text-align: center;
+  position: relative;
+  font-size: rem(16);
+  font-weight: $regular;
+  font-family: $base-font-family;
+}
+
+.page-thanks__text {
+  margin-top: rem(31);
+  @include mq("md") {
+    margin-top: rem(36);
+  }
+}
+
+.page-thanks__footer {
+  margin-top: rem(141);
+  @include mq("md") {
+    margin-top: rem(117);
+  }
+}

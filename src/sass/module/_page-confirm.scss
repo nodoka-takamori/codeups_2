@@ -1,0 +1,33 @@
+@use "global" as *;
+.layout-confirm {
+  margin-top: rem(50);
+}
+
+.page-confirm__list {
+  display: flex;
+  flex-direction: column;
+  gap: rem(10);
+  @include mq("md") {
+    gap: rem(20);
+  }
+}
+.page-confirm__item {
+  display: flex;
+  flex-direction: column;
+  gap: rem(10);
+
+  @include mq("md") {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+.contact__required {
+  color: #c94800;
+}
+.page-confirm__buttons {
+  display: flex;
+  justify-content: center;
+  gap: rem(100);
+  margin-top: rem(100);
+  margin-inline: auto;
+}

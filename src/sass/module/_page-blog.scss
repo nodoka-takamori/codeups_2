@@ -1,0 +1,222 @@
+@use "global" as *;
+
+.page-blog {
+  position: relative;
+}
+.page-blog__inner::before {
+  position: absolute;
+  content: "";
+  width: rem(120);
+  height: rem(55);
+  left: calc(50% - min(48.5vw, rem(169)));
+  top: rem(-25);
+  background: url(../../assets/images/common/decoration_3.png) center center /
+    contain no-repeat;
+  z-index: -1;
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-69);
+    width: rem(301);
+    height: rem(138);
+  }
+}
+.page-blog__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: rem(80);
+  padding-right: rem(21);
+  padding-left: rem(21);
+  @include mq("md") {
+    width: 100%;
+    display: flex;
+    flex-direction: initial;
+    gap: rem(81);
+    padding-right: $padding-pc;
+    padding-right: $padding-pc;
+  }
+}
+
+.page-blog__main {
+  width: 100%;
+  @include mq("md") {
+    width: 72%;
+  }
+}
+
+.page-blog__pagination {
+  margin-top: rem(80);
+  @include mq("md") {
+    margin-top: rem(86);
+  }
+}
+
+.page-blog__pagination--sub {
+  margin-top: rem(44);
+  @include mq("md") {
+    margin-top: rem(78);
+  }
+}
+
+.page-blog__aside {
+  max-width: rem(292);
+  margin-inline: auto;
+  width: 100%;
+  @include mq("md") {
+    width: 30%;
+    margin-inline: initial;
+    max-width: initial;
+  }
+}
+
+
+
+.page-blog__contact {
+  margin-top: rem(108);
+  @include mq("md") {
+    margin-top: rem(141);
+  }
+}
+.page-blog__footer {
+  margin-top: rem(100);
+  @include mq("md") {
+    margin-top: rem(160);
+  }
+}
+// サブページ
+.page-blog__inner--sub {
+  padding-right: $padding-sp;
+  padding-left: $padding-sp;
+  @include mq("md") {
+    padding-right: $padding-pc;
+    padding-right: $padding-pc;
+  }
+}
+.page-blog__inner--sub::before {
+  left: calc(50% - min(48.5vw, rem(169)));
+  top: rem(-20);
+  @include mq("md") {
+    left: calc(50% - min(48.5vw, rem(621)));
+    top: rem(-69);
+  }
+}
+
+.page-blog__contents {
+  width: 100%;
+  max-width: rem(600);
+  margin-inline: auto;
+  @include mq("md") {
+    max-width: rem(703);
+  }
+}
+
+.page-blog__contents time {
+  font-size: rem(14);
+  font-weight: $regular;
+  color: $black;
+  font-family: "Gotu", sans-serif;
+}
+
+.page-blog__title {
+  font-family: $base-font-family;
+  font-size: rem(24);
+  font-weight: $regular;
+  color: $black;
+  border-bottom: 1px solid $blue;
+  line-height: 1.8;
+  @include mq("md") {
+    font-size: rem(32);
+    line-height: 1.4;
+    font-weight: $medium;
+  }
+}
+
+.page-blog__photo {
+  margin-top: rem(24);
+  @include mq("md") {
+    margin-top: rem(40);
+  }
+}
+
+.page-blog__photo{
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+}
+
+.page-blog__photo img{
+  aspect-ratio: 700 / 468;
+  object-fit: cover;
+  height: auto;
+  width: 100%;
+}
+
+.page-blog__content {
+  margin-top: rem(22);
+  @include mq("md") {
+    margin-top: rem(38);
+  }
+}
+.page-blog__content p {
+  margin-top: rem(22);
+  font-family: $base-font-family;
+  font-size: rem(16);
+  font-weight: $regular;
+  color: $black;
+  @include mq("md") {
+    margin-top: rem(38);
+  }
+}
+.page-blog__content img {
+  margin-top: rem(24);
+  @include mq("md") {
+    margin-top: rem(40);
+  }
+}
+
+.page-blog__content ul {
+  margin-top: rem(29);
+  @include mq("md") {
+    margin-top: rem(42);
+  }
+}
+
+.page-blog__content li {
+  font-family: $base-font-family;
+  font-size: rem(16);
+  font-weight: $regular;
+  color: $black;
+  position: relative;
+  padding-left: rem(27);
+  @include mq("md") {
+    padding-left: rem(31);
+  }
+}
+.page-blog__content li:not(:first-child) {
+  margin-top: rem(3);
+}
+.page-blog__content li::before {
+  position: absolute;
+  content: "";
+  width: rem(18);
+  height: rem(18);
+  left: rem(5);
+  top: rem(2);
+  background-size: contain;
+  background: url(../../assets/images/common/starfish_black.png);
+}
+
+.page-blog__pagination--sub {
+  display: flex;
+  gap: rem(12);
+  justify-content: center;
+  margin-top: rem(42);
+  @include mq("md") {
+    margin-top: rem(83);
+    gap: rem(82);
+  }
+}

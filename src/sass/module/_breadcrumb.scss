@@ -1,0 +1,29 @@
+@use "global" as *;
+
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: rem(6);
+}
+
+.breadcrumb__list a,
+.post,
+.archive {
+  font-family: $base-font-family;
+  font-size: rem(14);
+  font-weight: $regular;
+  color: $black;
+
+}
+.color{
+  color:$black;
+}
+
+// 404ページのパンクズ
+.breadcrumb__list--404 a{
+  color: $white;
+}
+.breadcrumb__list--404 .color {
+  color: $white;
+}

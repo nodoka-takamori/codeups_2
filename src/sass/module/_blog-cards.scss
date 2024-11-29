@@ -1,0 +1,28 @@
+@use "global" as *;
+
+.blog-cards {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+  @include mq("md") {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.blog-cards__item {
+    margin-inline: auto;
+    max-width: rem(500);
+    @include mq("md") {
+      margin-inline: initial;
+      max-width: rem(600);
+    }
+  }
+
+.blog-cards--sub {
+  gap: rem(43) rem(40);
+  @include mq("md") {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: rem(80) rem(40);
+  }
+}

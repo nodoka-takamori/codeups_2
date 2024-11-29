@@ -1,0 +1,141 @@
+@use "global" as *;
+
+.tab__btn {
+  gap: rem(19);
+  display: flex;
+  width: 100%;
+  @include mq("md") {
+    gap: rem(16) 8%;
+  }
+}
+
+
+.tab__name {
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  color: $blue;
+  background-color: $light-blue;
+  cursor: pointer;
+  font-size: rem(14);
+  text-align: center;
+  font-weight: $regular;
+  line-height: 1.571;
+  padding: rem(10) rem(0);
+  position: relative;
+  text-align: center;
+  transition: 0.3s ease;
+  width: 100%;
+  @include mq("md") {
+    font-size: rem(24);
+    padding: rem(24) rem(3) rem(24) rem(87);
+  }
+}
+.tab__name:hover {
+  color: $light-blue;
+  background-color: $blue;
+  transition: 0.3s ease-in-out;
+}
+
+.tab__name:hover::before {
+  @include mq("md") {
+    transition: 0.3s ease;
+    position: absolute;
+    content: "";
+    width: rem(64);
+    height: rem(64);
+    top: rem(10);
+    background-size: contain;
+    left: rem(29);
+    background: url(../../assets/images/common/giji_1.png);
+  }
+}
+
+.tab__name.is-change {
+  background-color: $blue;
+  color: $white;
+  transition: 0.3s ease-in-out;
+}
+.tab__name.is-change::before {
+  background-color: $blue;
+  color: $white;
+  transition: 0.3s ease-in-out;
+  @include mq("md") {
+    position: absolute;
+    content: "";
+    width: rem(64);
+    height: rem(64);
+    top: rem(10);
+    background-size: contain;
+    left: rem(29);
+    z-index: 5;
+    background: url(../../assets/images/common/giji_1.png);
+  }
+}
+
+.tab__name::before {
+  @include mq("md") {
+    transition: 0.3s ease;
+    position: absolute;
+    content: "";
+    width: rem(64);
+    height: rem(64);
+    top: rem(10);
+    background-size: contain;
+    left: rem(29);
+    background: url(../../assets/images/common/giji_1_blue.png);
+  }
+}
+
+.tab__content {
+  margin-top: rem(13);
+  display: none;
+  width: 100%;
+  @include mq("md") {
+    margin-top: rem(25);
+  }
+}
+.tab__content.is-show {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: rem(5);
+  padding: rem(19) rem(24) rem(25);
+  border: 1px solid $blue;
+
+  @include mq("md") {
+    flex-direction: initial;
+    padding: rem(24) rem(24);
+    gap: rem(48);
+  }
+}
+
+.tab__text-wrap {
+  width: 100%;
+  @include mq("md") {
+    width: 48%;
+  }
+}
+
+.tab__title {
+  color: $black;
+  font-size: rem(24);
+  font-family: $base-font-family;
+  font-weight: $bold;
+  border-bottom: 1px solid $blue;
+}
+
+.tab__text {
+  color: $black;
+  font-size: rem(16);
+  font-family: $base-font-family;
+  font-weight: $regular;
+  margin-top: rem(8);
+}
+
+.tab__photo {
+  width: 100%;
+  @include mq("md") {
+    width: 48%;
+  }
+}

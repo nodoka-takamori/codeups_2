@@ -1,0 +1,127 @@
+@use "global" as *;
+
+.campaign {
+  overflow: hidden;
+}
+
+.campaign__title-wrap {
+  width: 100%;
+  margin-inline: auto;
+
+  @include mq("md") {
+    max-width: rem(1080);
+    margin-inline: auto;
+  }
+}
+
+.campaign-swiper__button {
+  display: none;
+
+  @include mq("md") {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: rem(81);
+    margin-top: rem(-67);
+    padding-right: calc(50% - min(48.5vw, 39.75rem));
+    align-items: center;
+  }
+}
+
+
+.campaign-swiper__button--next::after,
+.campaign-swiper__button--prev::after {
+  display: none;
+}
+
+.swiper-button-prev.campaign-swiper__button--prev {
+  background-image: url(../images/common/left__arrow.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: rem(80);
+  height: rem(80);
+  aspect-ratio: 1/1;
+  @include mq("md") {
+            margin-top: 0;
+              position: inherit;
+  }
+}
+.swiper-button-next.campaign-swiper__button--next {
+  background-image: url(../images/common/right__arrow.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  width: rem(80);
+  height: rem(80);
+  aspect-ratio: 1/1;
+
+  @include mq("md") {
+    margin-top: 0;
+        position: inherit;
+  }
+}
+
+
+
+
+// 子要素にデフォルトサイズと背景画像を適用
+// .campaign-swiper__button--prev,
+// .campaign-swiper__button--next {
+//   // background: center / contain no-repeat; // 背景画像を適切に配置
+//   width: rem(80);
+//   height: rem(80);
+//   aspect-ratio: 1 / 1; // 正方形を維持
+//   visibility: visible; // 子要素が見えるよう設定
+//   position: relative;
+
+//   @include mq("md") {
+//     margin-top: 0;
+//   }
+// }
+
+
+
+
+.campaign__swiper {
+  display: flex;
+  flex-wrap: wrap;
+  /* カードを横並びにしつつ折り返しを許可 */
+  gap: rem(24);
+  /* カード間のスペース */
+  width: 100vw;
+  margin-right: calc(50% - 50vw);
+  margin-top: rem(28);
+
+  @include mq("md") {
+    margin-top: rem(23);
+  }
+}
+
+.swiper {
+  margin-left: 0;
+}
+
+.campaign__swiper-slide {
+  margin-bottom: rem(14);
+  margin-right: rem(24);
+  max-width: rem(280);
+  width: 100%;
+  height: initial;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+  @include mq("md") {
+    width: 23.125%;
+    min-width: rem(333);
+    margin-right: rem(40);
+  }
+}
+
+.campaign__button {
+  margin-top: rem(24);
+  text-align: center;
+  padding-bottom: rem(3);
+
+  @include mq("md") {
+    margin-top: rem(67);
+  }
+}

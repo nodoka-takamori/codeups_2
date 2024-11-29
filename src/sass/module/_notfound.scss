@@ -1,0 +1,82 @@
+@use "global" as *;
+
+.notfound {
+  background-color: $blue;
+  // box-shadow: 1px 0 0 $blue;
+  z-index: -1;
+}
+.notfound__layout {
+  margin-top: rem(40);
+  @include mq("md") {
+    margin-top: rem(92);
+  }
+}
+.notfound__inner {
+  position: relative;
+}
+.notfound__inner::before {
+  position: absolute;
+  content: "";
+  width: rem(345);
+  height: rem(345);
+  left: calc(50% - min(48.5vw, rem(172)));
+  top: rem(-70);
+  background: url(../../assets/images/common/whale.png) center center / contain
+    no-repeat;
+  z-index: 1;
+  @include mq("md") {
+    width: rem(698);
+    height: rem(698);
+    left: calc(50% - min(48.5vw, rem(541)));
+    top: rem(-118);
+  }
+}
+
+.notfound__text-wrap {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.notfound__title {
+  font-size: rem(80);
+  font-weight: $regular;
+  color: $white;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  letter-spacing: rem(42);
+  text-indent: rem(38);
+  @include mq("md") {
+    font-size: rem(160);
+    letter-spacing: rem(79);
+    text-indent: rem(78);
+  }
+}
+
+.notfound__text {
+  font-size: rem(16);
+  font-weight: $regular;
+  color: $white;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  margin-top: rem(-16);
+  @include mq("md") {
+    margin-top: rem(3);
+  }
+}
+
+.notfound__button {
+  margin-top: rem(40);
+  text-align: center;
+  @include mq("md") {
+    margin-top: rem(80);
+  }
+}
+
+.footer.notfound__footer {
+  padding-top: rem(54);
+  margin-top: rem(-1);
+  @include mq("md") {
+    padding-top: rem(88);
+  }
+}

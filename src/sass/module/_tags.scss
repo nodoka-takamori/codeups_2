@@ -1,0 +1,52 @@
+@use "global" as *;
+.tags {
+  gap: rem(18) rem(22);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: rem(346);
+  margin-inline: auto;
+  @include mq("md") {
+    width: 100%;
+    margin-inline: initial;
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(16) rem(32);
+  }
+}
+
+.tags__item {
+  border: 1px solid $blue;
+  color: $blue;
+  background-color: $white;
+  cursor: pointer;
+  font-size: rem(14);
+  font-weight: $regular;
+  line-height: 1;
+  min-width: rem(162);
+  width: rem(162);
+  padding: rem(8) 0;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.3s ease;
+}
+
+.tags__item:hover {
+  color: $white;
+  background: $blue;
+  transition: 0.3s ease-in-out;
+}
+
+.tags__item.active {
+  background-color: $blue;
+  color: $white;
+  border-color: $blue;
+  font-family: "Lato", sans-serif;
+  font-size: rem(16);
+}
+
+/* activeクラスがない状態でホバー時のスタイルを明確に */
+.tags__item :hover:not(.active) {
+  background-color: $blue;
+  color: $white;
+}
