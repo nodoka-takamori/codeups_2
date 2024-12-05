@@ -32,6 +32,7 @@ $faq = esc_url(home_url('/faq'));
 $contact = esc_url(home_url('/contact'));
 $privacypolicy = esc_url(home_url('/privacypolicy'));
 $terms = esc_url(home_url('/terms-of-service'));
+$sitemap = esc_url(home_url('/sitemap'));
 ?>
 
 <body <?php body_class(); ?>>
@@ -110,7 +111,7 @@ $terms = esc_url(home_url('/terms-of-service'));
             <li class="sp-nav__item"><a href="<?php echo $price; ?>#price2">体験ダイビング</a></li>
             <li class="sp-nav__item"><a href="<?php echo $price; ?>#price3">ファンダイビング</a></li>
             <li class="sp-nav__item sp-nav__item--main">
-              <a href="./pages/faq.html">よくある質問</a>
+              <a href=<?php echo $faq; ?>>よくある質問</a>
             </li>
             <li class="sp-nav__item sp-nav__item--main">
               <a href=<?php echo $privacypolicy; ?>>プライバシー<br />
@@ -121,6 +122,9 @@ $terms = esc_url(home_url('/terms-of-service'));
             </li>
             <li class="sp-nav__item sp-nav__item--main">
               <a href=<?php echo $contact; ?>>お問い合わせ</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href=<?php echo $sitemap; ?>>サイトマップ</a>
             </li>
           </ul>
         </div>

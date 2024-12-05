@@ -25,14 +25,26 @@ $contact = esc_url(home_url('/contact'));
     <!-- メイン -->
     <section class="page-blog__main">
       <div class="blog-cards blog-cards--sub">
-        <?php if (have_posts()): ?>
-          <?php while (have_posts()): the_post(); ?>
+        <?php
+        // メインループの開始
+        // 投稿が存在するかを確認
+        if (have_posts()):
+          // 投稿が存在する間、ループを繰り返す
+          while (have_posts()):
+            the_post(); // 現在の投稿データをセットアップ
+        ?>
             <div class="blog-cards__item">
+              <!-- 投稿へのリンク -->
               <a href="<?php the_permalink(); ?>" class="blog-card">
                 <figure class="blog-card__img">
-                  <?php if (has_post_thumbnail()) : ?>
-                    <?php the_post_thumbnail('full'); ?>
-                  <?php else : ?>
+                  <?php
+                  // 投稿にアイキャッチ画像が設定されているか確認
+                  if (has_post_thumbnail()) :
+                    // アイキャッチ画像を表示
+                    the_post_thumbnail('full');
+                  else :
+                  ?>
+                    <!-- 画像がない場合のデフォルト画像 -->
                     <img
                       src="<?php echo esc_url(get_template_directory_uri()); ?>/dist/assets/images/common/noimage.jpg"
                       alt="noimage"
@@ -44,63 +56,67 @@ $contact = esc_url(home_url('/contact'));
                 </figure>
                 <div class="blog-card__body">
                   <div class="blog-card__meta">
+                    <!-- 投稿の公開日を表示 -->
                     <time datetime="<?php the_time('c'); ?>"><?php the_time('Y.m/d'); ?></time>
+                    <!-- 投稿タイトルを表示 -->
                     <h3 class="blog-card__title"><?php the_title(); ?></h3>
                   </div>
-                  <p class="blog-card__text">
+                  <!-- 投稿の抜粋テキストを生成して表示 -->
                   <p class="blog-card__text">
                     <?php
                     // 投稿本文を取得
                     $content = get_the_content();
-
-                    // 不要なタグを削除してテキストのみ取得
+                    // 不要なHTMLタグを削除
                     $content = wp_strip_all_tags($content);
-
-                    // 文字数を制限（UTF-8対応で110文字）
-                    if (mb_strlen($content, 'UTF-8') > 110) {
-                      $content = mb_substr($content, 0, 110, 'UTF-8') . '...';
+                    // 文字数を制限（90文字以上の場合「...」を追加）
+                    if (mb_strlen($content, 'UTF-8') > 90) {
+                      $content = mb_substr($content, 0, 90, 'UTF-8') . '...';
                     }
-
-                    // 整形した本文を出力
+                    // 整形済みの本文を出力
                     echo esc_html($content);
                     ?>
-                  </p>
                   </p>
                 </div>
               </a>
             </div>
-          <?php endwhile; ?>
-        <?php else: ?>
+          <?php
+          endwhile; // メインループの終了
+        else:
+          ?>
+          <!-- 投稿がない場合の表示 -->
           <p>投稿がありません。</p>
         <?php endif; ?>
       </div>
+
       <!-- ページネーション -->
       <div class="pagination page-blog__pagination">
         <div class="pagination__wrap">
           <div class="wp-pagenavi">
             <?php
             global $wp_query;
-            // 総ページ数と現在のページを取得
+            // 総ページ数を取得
             $total_pages = $wp_query->max_num_pages;
+            // 現在のページ番号を取得
             $current_page = max(1, get_query_var('paged'));
-            // 前のページリンク
+            // 前のページリンクを表示
             if ($current_page > 1) {
               echo '<a class="previouspostslink" rel="prev" href="' . esc_url(get_pagenum_link($current_page - 1)) . '">＜</a>';
             }
-            // 中央のページリンクを生成
+            // ページ番号のリンクを生成
             $pagination_links = paginate_links(array(
-              'total' => $total_pages,
-              'current' => $current_page,
-              'type' => 'array',
-              'mid_size' => 2,
-              'prev_next' => false,
+              'total' => $total_pages, // 総ページ数
+              'current' => $current_page, // 現在のページ
+              'type' => 'array', // 配列形式でリンクを取得
+              'mid_size' => 2, // 現在のページの前後に表示するリンク数
+              'prev_next' => false, // 前後リンクを非表示にする
             ));
+            // 生成したページリンクをループで表示
             if (!empty($pagination_links)) {
               foreach ($pagination_links as $link) {
                 echo $link;
               }
             }
-            // 次のページリンク
+            // 次のページリンクを表示
             if ($current_page < $total_pages) {
               echo '<a class="nextpostslink" rel="next" href="' . esc_url(get_pagenum_link($current_page + 1)) . '">＞</a>';
             }
@@ -109,6 +125,7 @@ $contact = esc_url(home_url('/contact'));
         </div>
       </div>
     </section>
+
     <!-- アサイド -->
     <aside class="page-blog__aside aside">
       <?php get_sidebar(); ?>

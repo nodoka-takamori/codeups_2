@@ -156,3 +156,42 @@ function custom_admin_enqueue()
     wp_enqueue_style('custom_admin_enqueue', get_stylesheet_directory_uri() . '/my-widgets.css');
 }
 add_action('admin_enqueue_scripts', 'custom_admin_enqueue');
+
+// キャンペーン投稿タイトルを取得するショートコードを定義
+function populate_campaign_titles()
+{
+    // WP_Query設定
+    $args = array(
+        'post_type' => 'campaign',                // 投稿タイプを指定（キャンペーン投稿の投稿タイプに変更）
+        'posts_per_page' => -1,              // 全件取得
+        'tax_query' => array(                // タクソノミー条件
+            array(
+                'taxonomy' => 'campaign_category', // タクソノミー名
+                'field'    => 'slug',             // スラッグで一致
+                'terms'    => 'campaign_category', // 対象スラッグを指定
+            ),
+        ),
+    );
+
+    $query = new WP_Query($args); // 投稿データを取得
+    $options = []; // ドロップダウンオプション用配列
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            // 投稿タイトルを配列に追加
+            $options[] = get_the_title();
+        }
+    }
+    wp_reset_postdata(); // クエリをリセット
+
+    // 配列からオプションHTMLを生成
+    $html = '<select name="campaign-titles">';
+    foreach ($options as $option) {
+        $html .= sprintf('<option value="%s">%s</option>', esc_attr($option), esc_html($option));
+    }
+    $html .= '</select>';
+
+    return $html;
+}
+add_shortcode('campaign_titles_dropdown', 'populate_campaign_titles');

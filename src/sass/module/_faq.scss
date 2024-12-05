@@ -5,15 +5,13 @@
   cursor: pointer;
   display: flex;
   justify-content: space-between;
-  position: relative;
-  cursor: pointer;
   background-color: $blue;
   color: $white;
   font-family: $base-font-family;
   font-size: rem(16);
   font-weight: $regular;
   width: 100%;
-  padding: rem(15);
+  padding: rem(15) rem(52) rem(15) rem(15);
   @include mq("md") {
     font-size: rem(20);
     padding: rem(24) rem(40);

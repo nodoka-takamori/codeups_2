@@ -35,11 +35,12 @@
   display: flex;
   flex-direction: column;
 }
-.aside__article-container{
+.aside__article-container {
   gap: rem(23);
-    @include mq("md") {
-      gap: rem(22);
-    }
+
+  @include mq("md") {
+    gap: rem(22);
+  }
 }
 
 .aside__article-block {
@@ -139,6 +140,7 @@
   margin-top: rem(86);
 }
 .aside__campaign-container {
+  gap: rem(35);
   margin-top: rem(23);
   @include mq("md") {
     margin-top: rem(25);

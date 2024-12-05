@@ -125,6 +125,11 @@
     width: 58%;
   }
 }
+.voice-card__body{
+  margin-top: rem(39);
+  @include mq("md") {
+    margin-top: rem(39);}
+}
 
 .voice-card__text-info {
   margin-top: rem(16);

@@ -193,7 +193,7 @@
   position: relative;
   padding-left: rem(27);
   @include mq("md") {
-    padding-left: rem(31);
+    padding-left: rem(48);
   }
 }
 .page-blog__content li:not(:first-child) {
@@ -212,7 +212,7 @@
 
 .page-blog__pagination--sub {
   display: flex;
-  gap: rem(12);
+  gap: rem(82);
   justify-content: center;
   margin-top: rem(42);
   @include mq("md") {

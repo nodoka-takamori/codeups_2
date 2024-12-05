@@ -132,7 +132,9 @@ line-height: 1.5;
 .campaign-card__price-wrap {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: center;
+  gap: rem(20);
+  margin-top: rem(6);
 }
 
 
@@ -141,12 +143,10 @@ line-height: 1.5;
   font-size: rem(20);
   font-weight: $bold;
   color: $black;
-  margin-left: rem(19);
   line-height: 2.4;
-position: relative;
+  position: relative;
   @include mq("md") {
     font-size: rem(24);
-    margin-left: rem(17);
   }
 }
 .campaign-card__subprice span:before {
@@ -167,10 +167,8 @@ position: relative;
   font-size: rem(32);
   font-weight: $bold;
   color: $blue;
-  margin-right: rem(18);
   @include mq("md") {
     font-size: rem(40);
-    margin-right: 0;
   }
 }
 
@@ -291,7 +289,7 @@ font-family: "Lato", sans-serif;
   transition: transform 0.8s;
 }
 .campaign-card__body--aside.campaign-card__body--aside {
-  padding: rem(14) rem(16) rem(10);
+  padding: rem(10) rem(16) rem(5);
 }
 .campaign-card__title--aside {
   text-align: center;
@@ -309,8 +307,11 @@ font-family: "Lato", sans-serif;
 }
 .campaign-card__price-wrap--aside.campaign-card__price-wrap--aside {
   align-items: initial;
+  gap: rem(18);
 }
 .campaign-card__price--aside.campaign-card__price--aside {
   font-size: rem(32);
-  margin-right: rem(25);
+}
+.campaign-card__subprice--aside span.campaign-card__subprice--aside span{
+  font-size:  rem(20);
 }

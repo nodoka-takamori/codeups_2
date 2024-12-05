@@ -4,7 +4,8 @@ $campaign = esc_url(home_url('/campaign'));
 ?>
 <!-- アサイド -->
 
-<div class="aside">
+<!-- <div class="aside"> -->
+<div class="aside__article">
   <div class="aside__title-line">
     <h2 class="aside__title">人気記事</h2>
   </div>
@@ -48,7 +49,6 @@ $campaign = esc_url(home_url('/campaign'));
     <p>記事が投稿されていません</p>
   <?php endif; ?>
 </div>
-
 <div class="aside__voice">
   <div class="aside__title-line">
     <h2 class="aside__title">口コミ</h2>
@@ -130,42 +130,48 @@ $campaign = esc_url(home_url('/campaign'));
         while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
           $campaign_link = get_permalink(); // 個別投稿ページへのリンク
       ?>
-          <div
-            class="aside-campaign__card campaign-card campaign-card--aside">
-            <a href="<?php echo esc_url($campaign_link); ?>">
-              <figure class="campaign-card__img--aside">
-                <?php if (has_post_thumbnail()) : ?>
-                  <source srcset="<?php the_post_thumbnail_url('full'); ?>" type="image/webp">
-                  <img src="<?php the_post_thumbnail_url('full'); ?>" alt="<?php the_title(); ?>のアイキャッチ画像">
-                <?php else : ?>
-                  <img src="<?php echo esc_url(get_theme_file_uri('/assets/images/common/noimage.jpg')); ?>" alt="noimage">
-                <?php endif; ?>
-              </figure>
-              <div class="campaign-card__body campaign-card__body--aside">
-                <div class="campaign-card__title-container">
-                  <h3 class="campaign-card__title campaign-card__title--aside">
+          <div class="campaign-card campaign-card--aside">
+            <div class="campaign-card__img--aside">
+              <?php if (has_post_thumbnail()) : ?>
+                <?php the_post_thumbnail('full'); ?>
+              <?php else : ?>
+                <img
+                  src="<?php echo esc_url(get_template_directory_uri()); ?>/dist/assets/images/common/noimage.jpg"
+                  alt="noimage"
+                  class="noimage"
+                  loading="lazy"
+                  decoding="async" />
+              <?php endif; ?>
+            </div>
+            <div class="campaign-card__body campaign-card__body--aside">
+              <div class="campaign-card__title-container">
+
+                <h3 class="campaign-card__title campaign-card__title--aside">
+                  <a href="<?php the_permalink(); ?>">
                     <?php the_title(); ?>
-                  </h3>
-                </div>
-                <div class="campaign-card__text-wrap campaign-card__text-wrap--aside">
-                  <p class="campaign-card__text campaign-card__text--aside">
-                    全部コミコミ(お一人様)
-                  </p>
-                  <div class="campaign-card__price-wrap campaign-card__price-wrap--aside">
-                    <div class="campaign-card__subprice">
-                      <span>
-                        <?php $price = get_field('campaign_subprice');
-                        echo '¥' . number_format($price);
-                        ?>
-                      </span>
-                    </div>
-                    <div class="campaign-card__price campaign-card__price--aside">
-                      <?php $price = get_field('campaign_price');
-                      echo '¥' . number_format($price); ?>
-                    </div>
+                  </a>
+                </h3>
+              </div>
+              <div class="campaign-card__text-wrap campaign-card__text-wrap--aside">
+                <p class="campaign-card__text campaign-card__text--aside">全部コミコミ(お一人様)</p>
+                <div class="campaign-card__price-wrap campaign-card__price-wrap--aside">
+                  <div class="campaign-card__subprice campaign-card__subprice--aside">
+                    <span>
+                      <?php
+                      $subprice = get_field('campaign_subprice');
+                      echo '¥' . number_format($subprice);
+                      ?>
+                    </span>
+                  </div>
+                  <div class="campaign-card__price campaign-card__price--aside">
+                    <?php
+                    $price = get_field('campaign_price');
+                    echo '¥' . number_format($price);
+                    ?>
                   </div>
                 </div>
               </div>
+            </div>
           </div>
     </div>
     </a>
@@ -226,10 +232,10 @@ $campaign = esc_url(home_url('/campaign'));
         </ul>
       </div>
     </div>
-
   </div>
 </div>
 </div>
 </div>
 </div>
 </div>
+<!-- </div> -->

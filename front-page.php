@@ -274,8 +274,8 @@ $contact = esc_url(home_url('/contact'));
                     <?php
                     $content = get_the_content();
                     $content = wp_strip_all_tags($content); // HTMLタグを除去
-                    if (mb_strlen($content, 'UTF-8') > 110) {
-                      $content = mb_substr($content, 0, 110, 'UTF-8') . '...';
+                    if (mb_strlen($content, 'UTF-8') > 90) {
+                      $content = mb_substr($content, 0, 90, 'UTF-8') . '...';
                     }
                     echo esc_html($content);
                     ?>
@@ -350,11 +350,11 @@ $contact = esc_url(home_url('/contact'));
                         </h3>
                       </div>
                       <div class="voice-card__img colorbox js-colorbox">
-                        <?php if (has_post_thumbnail()) : // 投稿にサムネイル画像がある場合 
+                        <?php if (has_post_thumbnail()) : // 投稿にサムネイル画像がある場合
                         ?>
-                          <?php the_post_thumbnail('full'); // サムネイル画像をフルサイズで表示 
+                          <?php the_post_thumbnail('full'); // サムネイル画像をフルサイズで表示
                           ?>
-                        <?php else : // サムネイル画像がない場合 
+                        <?php else : // サムネイル画像がない場合
                         ?>
                           <img
                             src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/noimage.jpg"
@@ -367,11 +367,11 @@ $contact = esc_url(home_url('/contact'));
                     <div class="voice-card__body">
                       <p class="voice-card__text">
                         <?php
-                        // 投稿本文を取得して100文字以内にトリム
+                        // 投稿本文を取得して220文字以内にトリム
                         $content = get_the_content(); // 投稿の本文を取得
                         $content = wp_strip_all_tags($content); // HTMLタグをすべて削除
-                        if (mb_strlen($content, 'UTF-8') > 200) { // 本文が100文字を超える場合
-                          $content = mb_substr($content, 0, 200, 'UTF-8') . '...'; // 100文字に切り取って省略記号を付与
+                        if (mb_strlen($content, 'UTF-8') > 220) { // 本文が220文字を超える場合
+                          $content = mb_substr($content, 0, 220, 'UTF-8') . '...'; // 220文字に切り取って省略記号を付与
                         }
                         echo esc_html($content); // 整形後の本文を出力
                         ?>

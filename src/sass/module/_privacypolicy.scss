@@ -8,6 +8,7 @@
   }
 }
 
+
 .privacypolicy__inner {
   padding-left: rem(14);
   @include mq("md") {
@@ -16,6 +17,7 @@
     padding-left: $padding-pc;
   }
 }
+
 .privacypolicy__inner::before {
   position: absolute;
   content: "";
