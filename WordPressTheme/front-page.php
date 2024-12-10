@@ -96,7 +96,13 @@ $contact = esc_url(home_url('/contact'));
           $latest_campaign_query = new WP_Query($latest_campaign_args);
           if ($latest_campaign_query->have_posts()) :
             while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
-              $campaign_link = get_permalink(); // 個別投稿ページへのリンク
+
+              // 投稿に関連するキャンペーンカテゴリーのタームを取得
+              $post_terms = get_the_terms(get_the_ID(), 'campaign_category');
+
+              // タクソノミーページへのリンク
+              $campaign_link = !empty($post_terms) ? get_term_link($post_terms[0]) : '#'; // 最初のカテゴリーのリンクを取得
+
           ?>
               <div class="swiper-slide campaign__swiper-slide">
                 <a href="<?php echo esc_url($campaign_link); ?>" class="campaign-card__layout">
@@ -105,14 +111,13 @@ $contact = esc_url(home_url('/contact'));
                       <source srcset="<?php the_post_thumbnail_url('full'); ?>" type="image/webp">
                       <img src="<?php the_post_thumbnail_url('full'); ?>" alt="<?php the_title(); ?>のアイキャッチ画像">
                     <?php else : ?>
-                      <img src="<?php echo esc_url(get_theme_file_uri('dist/assets/images/common/noimage.jpg')); ?>" alt="noimage" class="noimage">
+                      <img src="<?php echo esc_url(get_theme_file_uri('assets/images/common/noimage.jpg')); ?>" alt="noimage" class="noimage">
                     <?php endif; ?>
                   </picture>
                   <div class="campaign-card__body">
                     <div class="campaign-card__title-container">
                       <div class="campaign-card__category-wrap">
                         <?php
-                        $post_terms = get_the_terms(get_the_ID(), 'campaign_category'); // 投稿に関連するタクソノミー
                         if (!empty($post_terms)) {
                           foreach ($post_terms as $post_term) {
                             echo '<div class="campaign-card__category">' . esc_html($post_term->name) . '</div>';
@@ -132,7 +137,8 @@ $contact = esc_url(home_url('/contact'));
                             <?php
                             $price = get_field('campaign_subprice');
                             echo '¥' . number_format($price);
-                            ?></span>
+                            ?>
+                          </span>
                         </div>
                         <div class="campaign-card__price">
                           <?php
@@ -167,11 +173,11 @@ $contact = esc_url(home_url('/contact'));
       <div class="about__photo-container">
         <div class="about__photo-wrap">
           <img
-            src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/about_2.jpg"
+            src="<?php echo get_template_directory_uri(); ?>/assets/images/common/about_2.jpg"
             alt="黄色の２匹の魚が泳いでいる"
             class="about__photo2" />
           <img
-            src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/about_1.jpg"
+            src="<?php echo get_template_directory_uri(); ?>/assets/images/common/about_1.jpg"
             alt="青い空と赤い屋根の上にシーサーが置いてある"
             class="about__photo1" />
         </div>
@@ -212,10 +218,10 @@ $contact = esc_url(home_url('/contact'));
         <div class="information__photo-wrap">
           <picture class="information__photo colorbox js-colorbox">
             <source
-              srcset="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/information_sp.jpg"
+              srcset="<?php echo get_template_directory_uri(); ?>/assets/images/common/information_sp.jpg"
               media="(max-width:768px)" />
             <img
-              src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/information.jpg"
+              src="<?php echo get_template_directory_uri(); ?>/assets/images/common/information.jpg"
               alt="海底の珊瑚と黄色の熱帯魚" />
           </picture>
         </div>
@@ -259,7 +265,7 @@ $contact = esc_url(home_url('/contact'));
                     <?php the_post_thumbnail('full'); ?>
                   <?php else : ?>
                     <img
-                      src="<?php echo esc_url(get_template_directory_uri()); ?>/dist/assets/images/common/noimage.jpg"
+                      src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/common/noimage.jpg"
                       alt="noimage"
                       loading="lazy"
                       decoding="async" />
@@ -301,91 +307,91 @@ $contact = esc_url(home_url('/contact'));
         <h2 class="section-header__subtitle">お客様の声</h2>
       </div>
       <div class="voice-card__container">
-          <div class="voice-cards">
-            <?php
-            // 最新の投稿2件を取得
-            $latest_voices_args = array( // クエリの条件を設定する配列
-              'post_type' => 'voice',   // カスタム投稿タイプ 'voice' を指定
-              'posts_per_page' => 2,   // 最大で2件の投稿を取得
-              'orderby' => 'date',    // 投稿の日付で並べ替え
-              'order' => 'DESC'       // 降順（新しい順）で並べ替え
-            );
-            $latest_voices_query = new WP_Query($latest_voices_args); // WP_Query クラスのインスタンスを作成し、条件に基づく投稿を取得
+        <div class="voice-cards">
+          <?php
+          // 最新の投稿2件を取得
+          $latest_voices_args = array( // クエリの条件を設定する配列
+            'post_type' => 'voice',   // カスタム投稿タイプ 'voice' を指定
+            'posts_per_page' => 2,   // 最大で2件の投稿を取得
+            'orderby' => 'date',    // 投稿の日付で並べ替え
+            'order' => 'DESC'       // 降順（新しい順）で並べ替え
+          );
+          $latest_voices_query = new WP_Query($latest_voices_args); // WP_Query クラスのインスタンスを作成し、条件に基づく投稿を取得
 
-            if ($latest_voices_query->have_posts()) : // 投稿が存在するかを確認
-              while ($latest_voices_query->have_posts()) : $latest_voices_query->the_post(); // 投稿ループを開始 
-            ?>
-                <div class="voice-cards__item">
-                  <a href="<?php echo $voice; ?> " class="voice-card"> <!-- 投稿のリンクを出力 -->
-                    <div class="voice-card__head">
-                      <div class="voice-card__title-container">
-                        <div class="voice-card__category-wrapper">
-                          <p class="voice-card__age">
-                            <?php
-                            // 年齢を表示（カスタムフィールド 'age' の値を取得）
-                            $age = get_field('age'); // Advanced Custom Fields (ACF) の値を取得
-                            echo $age ? esc_html($age) : '年齢情報なし'; // 値が存在する場合は表示、存在しない場合は「年齢情報なし」を表示
-                            ?>
-                            <?php
-                            // 性別を表示（カスタムフィールド 'sex' の値を取得）
-                            $sex = get_field('sex'); // ACF の値を取得
-                            echo $sex ? esc_html($sex) : '性別情報なし'; // 値が存在する場合は表示、存在しない場合は「性別情報なし」を表示
-                            ?>
-                          </p>
-                          <div class="voice-card__category-wrap">
-                            <?php
-                            // カテゴリーを表示
-                            $categories = get_the_terms(get_the_ID(), 'voice_category'); // カスタムタクソノミー 'voice_category' のカテゴリを取得
-                            if (!empty($categories)) { // カテゴリーが存在する場合のみ処理を実行
-                              foreach ($categories as $category) { // 複数のカテゴリがある場合、それぞれの名前をループで出力
-                                echo '<p class="voice-card__category">' . esc_html($category->name) . '</p>'; // カテゴリ名を出力
-                              }
+          if ($latest_voices_query->have_posts()) : // 投稿が存在するかを確認
+            while ($latest_voices_query->have_posts()) : $latest_voices_query->the_post(); // 投稿ループを開始 
+          ?>
+              <div class="voice-cards__item">
+                <a href="<?php echo $voice; ?> " class="voice-card"> <!-- 投稿のリンクを出力 -->
+                  <div class="voice-card__head">
+                    <div class="voice-card__title-container">
+                      <div class="voice-card__category-wrapper">
+                        <p class="voice-card__age">
+                          <?php
+                          // 年齢を表示（カスタムフィールド 'age' の値を取得）
+                          $age = get_field('age'); // Advanced Custom Fields (ACF) の値を取得
+                          echo $age ? esc_html($age) : '年齢情報なし'; // 値が存在する場合は表示、存在しない場合は「年齢情報なし」を表示
+                          ?>
+                          <?php
+                          // 性別を表示（カスタムフィールド 'sex' の値を取得）
+                          $sex = get_field('sex'); // ACF の値を取得
+                          echo $sex ? esc_html($sex) : '性別情報なし'; // 値が存在する場合は表示、存在しない場合は「性別情報なし」を表示
+                          ?>
+                        </p>
+                        <div class="voice-card__category-wrap">
+                          <?php
+                          // カテゴリーを表示
+                          $categories = get_the_terms(get_the_ID(), 'voice_category'); // カスタムタクソノミー 'voice_category' のカテゴリを取得
+                          if (!empty($categories)) { // カテゴリーが存在する場合のみ処理を実行
+                            foreach ($categories as $category) { // 複数のカテゴリがある場合、それぞれの名前をループで出力
+                              echo '<p class="voice-card__category">' . esc_html($category->name) . '</p>'; // カテゴリ名を出力
                             }
-                            ?>
-                          </div>
+                          }
+                          ?>
                         </div>
-                        <h3 class="voice-card__title">
-                          <?php the_title(); // 投稿タイトルを出力
-                          ?>
-                        </h3>
                       </div>
-                      <div class="voice-card__img colorbox js-colorbox">
-                        <?php if (has_post_thumbnail()) : // 投稿にサムネイル画像がある場合
+                      <h3 class="voice-card__title">
+                        <?php the_title(); // 投稿タイトルを出力
                         ?>
-                          <?php the_post_thumbnail('full'); // サムネイル画像をフルサイズで表示
-                          ?>
-                        <?php else : // サムネイル画像がない場合
-                        ?>
-                          <img
-                            src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/noimage.jpg"
-                            alt="noimage"
-                            loading="lazy"
-                            decoding="async" />
-                        <?php endif; ?>
-                      </div>
+                      </h3>
                     </div>
-                    <div class="voice-card__body">
-                      <p class="voice-card__text">
-                        <?php
-                        // 投稿本文を取得して220文字以内にトリム
-                        $content = get_the_content(); // 投稿の本文を取得
-                        $content = wp_strip_all_tags($content); // HTMLタグをすべて削除
-                        if (mb_strlen($content, 'UTF-8') > 220) { // 本文が220文字を超える場合
-                          $content = mb_substr($content, 0, 220, 'UTF-8') . '...'; // 220文字に切り取って省略記号を付与
-                        }
-                        echo esc_html($content); // 整形後の本文を出力
+                    <div class="voice-card__img colorbox js-colorbox">
+                      <?php if (has_post_thumbnail()) : // 投稿にサムネイル画像がある場合
+                      ?>
+                        <?php the_post_thumbnail('full'); // サムネイル画像をフルサイズで表示
                         ?>
-                      </p>
+                      <?php else : // サムネイル画像がない場合
+                      ?>
+                        <img
+                          src="<?php echo get_template_directory_uri(); ?>/assets/images/common/noimage.jpg"
+                          alt="noimage"
+                          loading="lazy"
+                          decoding="async" />
+                      <?php endif; ?>
                     </div>
-                  </a>
-                </div>
-              <?php endwhile; // 投稿ループ終了
-              wp_reset_postdata(); // クエリをリセットしてグローバル変数を元に戻す
-            else : // 投稿が存在しない場合
-              ?>
-              <p class="no-posts">お客様の声はまだありません。</p> <!-- 投稿がない場合のメッセージを表示 -->
-            <?php endif; ?>
-          </div>
+                  </div>
+                  <div class="voice-card__body">
+                    <p class="voice-card__text">
+                      <?php
+                      // 投稿本文を取得して220文字以内にトリム
+                      $content = get_the_content(); // 投稿の本文を取得
+                      $content = wp_strip_all_tags($content); // HTMLタグをすべて削除
+                      if (mb_strlen($content, 'UTF-8') > 220) { // 本文が220文字を超える場合
+                        $content = mb_substr($content, 0, 220, 'UTF-8') . '...'; // 220文字に切り取って省略記号を付与
+                      }
+                      echo esc_html($content); // 整形後の本文を出力
+                      ?>
+                    </p>
+                  </div>
+                </a>
+              </div>
+            <?php endwhile; // 投稿ループ終了
+            wp_reset_postdata(); // クエリをリセットしてグローバル変数を元に戻す
+          else : // 投稿が存在しない場合
+            ?>
+            <p class="no-posts">お客様の声はまだありません。</p> <!-- 投稿がない場合のメッセージを表示 -->
+          <?php endif; ?>
+        </div>
       </div>
       <div class="voice__button">
         <a href=<?php echo $voice; ?> class="button">Viewmore<span class="arrow"></span></a> <!-- カスタム投稿タイプ 'voice' のアーカイブページリンクを生成 -->
@@ -519,61 +525,18 @@ $contact = esc_url(home_url('/contact'));
         <div class="price__photo colorbox js-colorbox">
           <picture>
             <source
-              srcset="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/price_sp.jpg"
+              srcset="<?php echo get_template_directory_uri(); ?>/assets/images/common/price_sp.jpg"
               media="(max-width:767px)" />
             <img
-              src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/price.jpg"
+              src="<?php echo get_template_directory_uri(); ?>/assets/images/common/price.jpg"
               alt="大きな珊瑚と小さな赤い熱帯魚がたくさんいる" />
           </picture>
         </div>
       </div>
       <div class="price__button">
         <a href=<?php echo $price; ?> class="button">Viewmore<span class="arrow"></span></a>
-        </a>
       </div>
     </div>
   </section>
-
-
-  <section class="contact top-contact">
-    <div class="inner">
-      <div class="contact__container">
-        <div class="contact__contents-left">
-          <div class="contact__logo">
-            <img src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/logo_blue.svg" alt="ロゴ" />
-          </div>
-          <div class="contact__address-wrap">
-            <div class="contact__address">
-              <p>沖縄県那覇市1-1</p>
-              <p>TEL:0120-000-0000</p>
-              <p>営業時間:8:30-19:00</p>
-              <p>定休日:毎週火曜日</p>
-            </div>
-            <div class="contact__address-map">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57393.969626622005!2d127.6275265342976!3d26.196615752174797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34e5681e893b714d%3A0xa5360835fe2d83b8!2z54Cs6ZW35bO2IOOCpuODn-OCq-OCuOODhuODqeOCuQ!5e0!3m2!1sja!2sjp!4v1725201731353!5m2!1sja!2sjp"
-                style="border: 0"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-          </div>
-        </div>
-        <div class="contact__contents-right">
-          <div class="contact__title-wrap">
-            <p class="contact__title">Contact</p>
-            <h2 class="contact__subtitle">お問い合わせ</h2>
-            <p class="contact__title-text">ご予約・お問い合わせはコチラ</p>
-            <div class="contact__button">
-              <a href=<?php echo $contact; ?> class="button">Contact us<span class="arrow"></span></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div class="button-top" id="js-button-top">
-    <a href="#"><img src="<?php echo get_template_directory_uri(); ?>/dist/assets/images/common/up__arrow.svg" alt="ロゴ" /></a>
-  </div>
 </main>
 <?php get_footer(); ?>

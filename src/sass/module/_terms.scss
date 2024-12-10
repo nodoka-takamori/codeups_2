@@ -97,3 +97,13 @@
 .wp-block-list li::before {
   content: counter(num) ".";
 }
+
+/* page-term-ob-service.php のみ適用 */
+// .page-term-ob-service-template .wp-block-list li {
+//   counter-increment: num;
+// }
+
+/* 他のテンプレートでは無効化 */
+// body.single-template .wp-block-list li {
+//   counter-increment: none;
+// }

@@ -19,19 +19,24 @@
   flex-grow: 1; /* カードを可能な限り同じ高さに引き伸ばす */
 }
 
-.campaign-card__img {
+.campaign-card__img,
+.campaign-card__img--aside {
   overflow: hidden;
   z-index: 1;
   position: relative;
   object-fit: cover;
   height: auto;
-  aspect-ratio: 280 / 188;
   width: 100%;
   transition: transform 0.8s;
-  @include mq("md") {
-    aspect-ratio: 333 / 223;
+}
+
+@include mq("md") {
+  .campaign-card__layout:hover > picture > img,
+  .campaign-card__img--aside:hover > img {
+    transform: scale(1.2);
   }
 }
+
 .campaign-card__img .noimage {
   overflow: hidden;
   z-index: 1;
@@ -41,17 +46,16 @@
   width: 100%;
   transition: transform 0.8s;
 }
+
 .campaign-card__img img {
   aspect-ratio: 280 / 188;
   object-fit: cover;
   height: auto;
   width: 100%;
-  transition: transform 0.8s;
-}
 
-@include mq("md") {
-  .campaign-card a:hover > figure > img {
-    transform: scale(1.2);
+  @include mq("md") {
+    aspect-ratio: 333 / 223;
+    transition: transform 0.8s;
   }
 }
 

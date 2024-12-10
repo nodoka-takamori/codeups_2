@@ -24,11 +24,17 @@ function my_script_init()
     wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Gotu&family=Lato:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap', array(), null);
 
     // メインCSSの読み込み
+    // wp_enqueue_style(
+    //     'main-css',
+    //     get_template_directory_uri() . '/assets/css/style.css',
+    //     array(),
+    //     filemtime(get_template_directory() . '/assets/css/style.css')
+    // );
     wp_enqueue_style(
         'main-css',
-        get_template_directory_uri() . '/dist/assets/css/style.css',
+        get_theme_file_uri('/assets/css/style.css'),
         array(),
-        filemtime(get_template_directory() . '/dist/assets/css/style.css')
+        filemtime(get_theme_file_path('/assets/css/style.css'))
     );
 
     // jQueryの再登録
@@ -53,9 +59,9 @@ function my_script_init()
     // メインJavaScriptの読み込み
     wp_enqueue_script(
         'main-js',
-        get_template_directory_uri() . '/dist/assets/js/script.js',
+        get_template_directory_uri() . '/assets/js/script.js',
         array('jquery', 'swiper-js'),
-        filemtime(get_template_directory() . '/dist/assets/js/script.js'),
+        filemtime(get_template_directory() . '/assets/js/script.js'),
         true
     );
 }
@@ -115,20 +121,6 @@ function Change_objectlabel()
 }
 add_action('init', 'Change_objectlabel');
 add_action('admin_menu', 'Change_menulabel');
-
-
-
-// // ダッシュボード用のCSSを読み込む
-// add_action('admin_head', 'my_custom_dashboard_styles');
-
-
-//特定の投稿タイプのエディターを非表示にする
-// function remove_wysiwyg()
-// {
-//     remove_post_type_support('page', 'editor');
-// }
-// add_action('admin_init', 'remove_wysiwyg');
-
 
 // ダッシュボードにオリジナルウィジェットを追加する
 add_action('wp_dashboard_setup', 'my_dashboard_widgets');
@@ -195,3 +187,4 @@ function populate_campaign_titles()
     return $html;
 }
 add_shortcode('campaign_titles_dropdown', 'populate_campaign_titles');
+

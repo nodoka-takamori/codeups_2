@@ -58,12 +58,19 @@
     object-fit: cover;
     height: auto;
     width: 52%;
+    transition: transform 0.8s;
+}
+@include mq("md") {
+  .aside__article-photo:hover > img {
+    transform: scale(1.2);
+  }
 }
 .aside__article-photo img{
   aspect-ratio: 121 / 90;
   height: auto;
   object-fit: cover;
   width: 100%;
+  transition: transform 0.8s;
 }
 
 .aside__article-meta {
@@ -98,7 +105,7 @@
 .aside__voice-container {
   margin-top: rem(23);
 }
-.aside__vice-meta {
+.aside__voice-meta {
   margin-top: rem(14);
 }
 .aside__voice-photo {

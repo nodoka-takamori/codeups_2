@@ -89,12 +89,12 @@
     margin-top: rem(160);
   }
 }
-.wp-block-list li {
-  counter-increment: num;
-  padding-left: rem(23);
-  text-indent: rem(-18);
-  }
+// .wp-block-list li {
+//   counter-increment: num;
+//   padding-left: rem(23);
+//   text-indent: rem(-18);
+//   }
 
-.wp-block-list li::before {
-  content: counter(num) ".";
-}
+// .wp-block-list li::before {
+//   content: counter(num) ".";
+// }
