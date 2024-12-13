@@ -188,3 +188,15 @@ function populate_campaign_titles()
 }
 add_shortcode('campaign_titles_dropdown', 'populate_campaign_titles');
 
+
+// the_archive_title「月: 」や「年: 」などのいらない文字を削除
+add_filter('get_the_archive_title', function ($title) {
+    if (is_day()) {
+        $title = get_the_date('Y年n月j日'); // 年月日を「2024年8月31日」の形式で表示
+    } elseif (is_month()) {
+        $title = get_the_date('Y年n月'); // 年月を「2024年8月」の形式で表示
+    } elseif (is_year()) {
+        $title = get_the_date('Y年'); // 年を「2024年」の形式で表示
+    }
+    return $title;
+});

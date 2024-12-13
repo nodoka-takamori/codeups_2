@@ -4057,7 +4057,8 @@ html {
 	justify-content: center;
 }
 
-.campaign-card__subprice--big span {
+.campaign-card__subprice--big span,
+.campaign-card__subprice--aside span {
 	margin-left: 0;
 }
 

@@ -20,8 +20,6 @@ $contact = esc_url(home_url('/contact'));
       <div class="fv__image">
         <div class="swiper js-fv-Swiper">
           <div class="swiper-wrapper">
-            <!--  SCF（Smart Custom Fields）を使用して、"mainview" というグループフィールドのデータを取得。
-            　 SCF::get('mainview', get_the_ID()) は現在の投稿ページ（get_the_ID()）から "mainview" グループを取得する。 -->
             <?php
             $mv_images = SCF::get('mainview', get_the_ID());
             //  データが存在する場合に処理を進める
@@ -59,7 +57,7 @@ $contact = esc_url(home_url('/contact'));
                   endforeach; // 繰り返し処理終了
                 else : // 画像が設定されていない場合の処理
             ?>
-            <p>スライド画像が設定されていません。</p> <!-- エラーメッセージ -->
+            <p>スライド画像が設定されていません。</p>
           <?php endif; ?> <!-- 繰り返しフィールドデータの有無を確認する条件終了 -->
 
           </div>
@@ -87,13 +85,11 @@ $contact = esc_url(home_url('/contact'));
         <div class="swiper-wrapper">
           <?php
           // 最新のカスタム投稿（campaign）の8件を取得するクエリ
-          $latest_campaign_args = array(
+          $latest_campaign_query = new WP_Query([
             'post_type' => 'campaign',
             'posts_per_page' => 8,
-            'orderby' => 'date',
-            'order' => 'DESC',
-          );
-          $latest_campaign_query = new WP_Query($latest_campaign_args);
+          ]);
+
           if ($latest_campaign_query->have_posts()) :
             while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
 
@@ -102,7 +98,6 @@ $contact = esc_url(home_url('/contact'));
 
               // タクソノミーページへのリンク
               $campaign_link = !empty($post_terms) ? get_term_link($post_terms[0]) : '#'; // 最初のカテゴリーのリンクを取得
-
           ?>
               <div class="swiper-slide campaign__swiper-slide">
                 <a href="<?php echo esc_url($campaign_link); ?>" class="campaign-card__layout">
@@ -249,15 +244,13 @@ $contact = esc_url(home_url('/contact'));
       <div class="blog__wrap blog-cards">
         <?php
         // 最新の投稿3件を取得する
-        $latest_posts_args = array(
-          'post_type' => 'post', // 投稿タイプを指定（通常の投稿）
+        $latest_posts_query = new WP_Query([
           'posts_per_page' => 3, // 表示する投稿数を3件に設定
-          'orderby' => 'date',  // 日付順
-          'order' => 'DESC'     // 降順（新しい順）
-        );
-        $latest_posts_query = new WP_Query($latest_posts_args);
+        ]);
+
         if ($latest_posts_query->have_posts()) :
-          while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post(); ?>
+          while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post();
+        ?>
             <div class="blog-cards__item">
               <a href="<?php the_permalink(); ?>" class="blog-card">
                 <figure class="blog-card__img">
@@ -309,17 +302,13 @@ $contact = esc_url(home_url('/contact'));
       <div class="voice-card__container">
         <div class="voice-cards">
           <?php
-          // 最新の投稿2件を取得
-          $latest_voices_args = array( // クエリの条件を設定する配列
+          // 最新の投稿2件を取得する
+          $latest_posts_query = new WP_Query([
             'post_type' => 'voice',   // カスタム投稿タイプ 'voice' を指定
-            'posts_per_page' => 2,   // 最大で2件の投稿を取得
-            'orderby' => 'date',    // 投稿の日付で並べ替え
-            'order' => 'DESC'       // 降順（新しい順）で並べ替え
-          );
-          $latest_voices_query = new WP_Query($latest_voices_args); // WP_Query クラスのインスタンスを作成し、条件に基づく投稿を取得
-
-          if ($latest_voices_query->have_posts()) : // 投稿が存在するかを確認
-            while ($latest_voices_query->have_posts()) : $latest_voices_query->the_post(); // 投稿ループを開始 
+            'posts_per_page' => 2, // 表示する投稿数を2件に設定
+          ]);
+          if ($latest_posts_query->have_posts()) :
+            while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post();
           ?>
               <div class="voice-cards__item">
                 <a href="<?php echo $voice; ?> " class="voice-card"> <!-- 投稿のリンクを出力 -->
@@ -407,121 +396,60 @@ $contact = esc_url(home_url('/contact'));
       </div>
       <div class="price__container">
         <div class="price__contents price-lists">
-          <div class="price__lists-items">
+          <?php
+          // テーブル情報を動的に出力
+          for ($i = 1; $i <= 4; $i++) {
+            // 単一フィールドと繰り返しフィールドを取得
+            $table_title = SCF::get("table_title{$i}", 18);
+            $prices = SCF::get("prices_{$i}", 18);
 
+            // タイトルが設定されている場合は出力、それ以外はデフォルトメッセージ
+            if (!empty($table_title)) :
+          ?>
+              <div class="price__lists-items">
+                <h2 id="price<?php echo $i; ?>" class="price__list-title">
+                  <?php echo esc_html($table_title); ?>
+                </h2>
+              <?php else : ?>
+                <div class="price__lists-items">
+                  <h2 id="price<?php echo $i; ?>" class="price__list-title">
+                    情報がありません。
+                  </h2>
+                <?php endif; ?>
 
-            <?php
-            // 単一フィールド 'table_title1' を取得
-            $table_title1 = SCF::get('table_title1', 18);
-            // 繰り返しフィールド 'prices_1' を取得
-            $prices = SCF::get('prices_1', 18);
-
-            // 'table_title1'が設定されている場合、タイトルを出力
-            if (!empty($table_title1)) :
-            ?>
-              <h2 id="price1" class="price__list-title">
-                <?php echo esc_html($table_title1); ?>
-              </h2>
-            <?php
-            else :
-            ?>
-              <h2 id="price1" class="price__list-title">
-                情報がありません。
-              </h2>
-            <?php
-            endif;
-
-            // 繰り返しフィールド 'prices_1' が空の場合、「情報がありません」を表示
-            if (!empty($prices)) :
-            ?>
-              <dl class="price__list">
-                <?php foreach ($prices as $price_item) : ?>
-                  <?php if (!empty($price_item['text_1']) && !empty($price_item['price_1'])) : ?>
-                    <div class="price__list-item">
-                      <dt>
-                        <!-- コースの名前を表示 (text_1) -->
-                        <?php echo esc_html($price_item['text_1']); ?>
-                      </dt>
-                      <dd>
-                        <!-- 金額を表示 (price_1) -->
-                        <?php echo esc_html($price_item['price_1']); ?>
-                      </dd>
-                    </div>
-                  <?php else : ?>
-                    <div class="price__list-item">
-                      <dt>情報がありません。</dt>
-                      <dd>情報がありません。</dd>
-                    </div>
-                  <?php endif; ?>
-                <?php endforeach; ?>
-              </dl>
-            <?php
-            else :
-            ?>
-              <p class="price__list-message">情報がありません。</p>
-            <?php
-            endif;
-            ?>
-          </div>
-
-
-
-          <div class="price__lists-items">
-            <div class="price__list-title">体験ダイビング</div>
-            <dl class="price__list">
-              <div class="price__list-item">
-                <dt>ビーチ体験ダイビング(半日)</dt>
-                <dd>¥7,000</dd>
+                <?php
+                // 繰り返しフィールドが空の場合「情報がありません」を表示
+                if (!empty($prices)) :
+                ?>
+                  <dl class="price__list">
+                    <?php foreach ($prices as $price_item) : ?>
+                      <?php if (!empty($price_item["text_{$i}"]) && !empty($price_item["price_{$i}"])) : ?>
+                        <div class="price__list-item">
+                          <dt>
+                            <?php echo esc_html($price_item["text_{$i}"]); ?>
+                          </dt>
+                          <dd>
+                            <?php echo esc_html($price_item["price_{$i}"]); ?>
+                          </dd>
+                        </div>
+                      <?php else : ?>
+                        <div class="price__list-item">
+                          <dt>情報がありません。</dt>
+                          <dd>情報がありません。</dd>
+                        </div>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </dl>
+                </div>
+              <?php else : ?>
+                <p class="price__list-message">情報がありません。</p>
               </div>
-              <div class="price__list-item">
-                <dt>ビーチ体験ダイビング(1日)</dt>
-                <dd>¥14,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>ボート体験ダイビング(半日)</dt>
-                <dd>¥10,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>ボート体験ダイビング(1日)</dt>
-                <dd>¥18,000</dd>
-              </div>
-            </dl>
-          </div>
-          <div class="price__lists-items">
-            <div class="price__list-title">ファンダイビング</div>
-            <dl class="price__list">
-              <div class="price__list-item">
-                <dt>ビーチダイビング(2ダイブ)</dt>
-                <dd>¥14,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>ボートダイビング(2ダイブ)</dt>
-                <dd>¥18,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>スペシャルダイビング(2ダイブ)</dt>
-                <dd>¥24,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>ナイトダイビング(1ダイブ)</dt>
-                <dd>¥10,000</dd>
-              </div>
-            </dl>
-          </div>
-          <div class="price__lists-items">
-            <div class="price__list-title">スペシャルダイビング</div>
-            <dl class="price__list">
-              <div class="price__list-item">
-                <dt>貸切ダイビング(2ダイブ)</dt>
-                <dd>¥24,000</dd>
-              </div>
-              <div class="price__list-item">
-                <dt>1日ダイビング(3ダイブ)</dt>
-                <dd>¥32,000</dd>
-              </div>
-            </dl>
-          </div>
+            <?php endif; ?>
+          <?php
+          } // for文の終了
+          ?>
         </div>
+
         <div class="price__photo colorbox js-colorbox">
           <picture>
             <source
@@ -534,9 +462,10 @@ $contact = esc_url(home_url('/contact'));
         </div>
       </div>
       <div class="price__button">
-        <a href=<?php echo $price; ?> class="button">Viewmore<span class="arrow"></span></a>
+        <a href="<?php echo esc_url($price); ?>" class="button">Viewmore<span class="arrow"></span></a>
       </div>
     </div>
   </section>
+
 </main>
 <?php get_footer(); ?>

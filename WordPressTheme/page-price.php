@@ -19,169 +19,52 @@ $contact = esc_url(home_url('/contact'));
 <div class="page-price layout-price">
   <div class="page-price__inner inner">
     <div class="page-price__container price-lists">
-      <div class="price-lists__item price-list">
-        <?php
-        // 単一フィールド 'table_title1' を取得
-        $table_title1 = SCF::get('table_title1');
-        // 繰り返しフィールド 'prices_1' を取得
-        $prices = SCF::get('prices_1');
+      <?php
+      // 繰り返し対象のテーブルデータをループで処理
+      for ($i = 1; $i <= 4; $i++) {
+        // 単一フィールドと繰り返しフィールドの取得
+        $table_title = SCF::get("table_title{$i}");
+        $prices = SCF::get("prices_{$i}");
 
-        // 'table_title1'が設定されている場合、タイトルを出力
-        if (!empty($table_title1)) :
-        ?>
-          <h2 id="price1" class="price-list__title">
-            <?php echo esc_html($table_title1); ?>
-          </h2>
-        <?php
+        // タイトルが設定されている場合は出力
+        if (!empty($table_title)) :
+      ?>
+          <div class="price-lists__item price-list">
+            <h2 id="price<?php echo $i; ?>" class="price-list__title">
+              <?php echo esc_html($table_title); ?>
+            </h2>
+            <?php
+            // 繰り返しフィールドが空でない場合はテーブルを出力
+            if (!empty($prices)) :
+            ?>
+              <table class="price-list__table">
+                <tbody>
+                  <?php foreach ($prices as $price_item) : ?>
+                    <tr>
+                      <td class="price-list__sub-title">
+                        <?php
+                        // テキストフィールドを取得し改行を置換
+                        $text = $price_item["text_{$i}"];
+                        $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text));
+                        echo $formatted_text;
+                        ?>
+                      </td>
+                      <td class="price__price">
+                        <?php echo esc_html($price_item["price_{$i}"]); ?>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            <?php endif; ?>
+          </div>
+      <?php
         endif;
-        // 繰り返しフィールド 'prices_1' が空でない場合のみテーブルを表示
-        if (!empty($prices)) :
-        ?>
-          <table class="price-list__table">
-            <tbody>
-              <?php foreach ($prices as $price_item) : ?>
-                <tr>
-                  <td class="price-list__sub-title">
-                    <!-- コースの名前を表示 (text_1) -->
-                    <?php
-                    // 管理画面で改行した箇所に <br class="is-sp"> を付与
-                    $text = $price_item['text_1']; // フィールドの値を取得
-                    $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text)); // 改行を <br class="is-sp"> に置換
-                    echo $formatted_text; // フォーマット済みのテキストを出力
-                    ?>
-                  </td>
-                  <td class="price__price">
-                    <!-- 金額を表示 (price_1) -->
-                    <?php echo esc_html($price_item['price_1']); ?>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
-      </div>
-      <div class="price-lists__item price-list">
-        <?php
-        // 単一フィールド 'table_title2' を取得
-        $table_title2 = SCF::get('table_title2');
-        // 繰り返しフィールド 'prices_2' を取得
-        $prices = SCF::get('prices_2');
-        // 'table_title2'が設定されている場合、タイトルを出力
-        if (!empty($table_title2)) :
-        ?>
-          <h2 id="price2" class="price-list__title">
-            <?php echo esc_html($table_title2); ?>
-          </h2>
-        <?php
-        endif;
-        // 繰り返しフィールド 'prices_2' が空でない場合のみテーブルを表示
-        if (!empty($prices)) :
-        ?>
-          <table class="price-list__table">
-            <tbody>
-              <?php foreach ($prices as $price_item) : ?>
-                <tr>
-                  <td class="price-list__sub-title">
-                    <!-- コースの名前を表示 (text_2) -->
-                    <?php
-                    // 管理画面で改行した箇所に <br class="is-sp"> を付与
-                    $text = $price_item['text_2']; // フィールドの値を取得
-                    $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text)); // 改行を <br class="is-sp"> に置換
-                    echo $formatted_text; // フォーマット済みのテキストを出力
-                    ?>
-                  </td>
-                  <td class="price__price">
-                    <!-- 金額を表示 (price_2) -->
-                    <?php echo esc_html($price_item['price_2']); ?>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
-      </div>
-      <div class="price-lists__item price-list">
-        <?php
-        // 単一フィールド 'table_title3' を取得
-        $table_title3 = SCF::get('table_title3');
-        // 繰り返しフィールド 'prices_3' を取得
-        $prices = SCF::get('prices_3');
-        // 'table_title3'が設定されている場合、タイトルを出力
-        if (!empty($table_title3)) :
-        ?>
-          <h2 id="price3" class="price-list__title">
-            <?php echo esc_html($table_title3); ?>
-          </h2>
-        <?php
-        endif;
-        // 繰り返しフィールド 'prices_3' が空でない場合のみテーブルを表示
-        if (!empty($prices)) :
-        ?>
-          <table class="price-list__table">
-            <tbody>
-              <?php foreach ($prices as $price_item) : ?>
-                <tr>
-                  <td class="price-list__sub-title">
-                    <!-- コースの名前を表示 (text_3) -->
-                    <?php
-                    // 管理画面で改行した箇所に <br class="is-sp"> を付与
-                    $text = $price_item['text_3']; // フィールドの値を取得
-                    $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text)); // 改行を <br class="is-sp"> に置換
-                    echo $formatted_text; // フォーマット済みのテキストを出力
-                    ?>
-                  </td>
-                  <td class="price__price">
-                    <!-- 金額を表示 (price_3) -->
-                    <?php echo esc_html($price_item['price_3']); ?>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
-      </div>
-      <div class="price-lists__item price-list">
-        <?php
-        // 単一フィールド 'table_title4' を取得
-        $table_title4 = SCF::get('table_title4');
-        // 繰り返しフィールド 'prices_4' を取得
-        $prices = SCF::get('prices_4');
-        // 'table_title4'が設定されている場合、タイトルを出力
-        if (!empty($table_title4)) :
-        ?>
-          <h2 id="price4" class="price-list__title">
-            <?php echo esc_html($table_title4); ?>
-          </h2>
-        <?php
-        endif;
-        // 繰り返しフィールド 'prices_4' が空でない場合のみテーブルを表示
-        if (!empty($prices)) :
-        ?>
-          <table class="price-list__table">
-            <tbody>
-              <?php foreach ($prices as $price_item) : ?>
-                <tr>
-                  <td class="price-list__sub-title">
-                    <!-- コースの名前を表示 (text_4) -->
-                    <?php
-                    // 管理画面で改行した箇所に <br class="is-sp"> を付与
-                    $text = $price_item['text_4']; // フィールドの値を取得
-                    $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text)); // 改行を <br class="is-sp"> に置換
-                    echo $formatted_text; // フォーマット済みのテキストを出力
-                    ?>
-                  </td>
-                  <td class="price__price">
-                    <!-- 金額を表示 (price_4) -->
-                    <?php echo esc_html($price_item['price_4']); ?>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        <?php endif; ?>
-      </div>
+      }
+      ?>
     </div>
   </div>
+
 </div>
 
 <?php get_footer(); ?>

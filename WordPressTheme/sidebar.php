@@ -8,12 +8,10 @@ $campaign = esc_url(home_url('/campaign'));
     <div class="aside__title-line">
       <h2 class="aside__title">人気記事</h2>
     </div>
+    <!-- 最新の投稿3件を取得する -->
     <?php
     $args = [
-      "post_type" => "post",
       "posts_per_page" => 3,
-      "orderby" => "date",
-      "order" => "DESC",
     ];
     $the_query = new WP_Query($args);
     ?>
@@ -51,12 +49,11 @@ $campaign = esc_url(home_url('/campaign'));
     <div class="aside__title-line">
       <h2 class="aside__title">口コミ</h2>
     </div>
+    <!-- 最新の投稿2件を取得する -->
     <?php
     $args = [
       "post_type" => "voice",
       "posts_per_page" => 1,
-      "orderby" => "date",
-      "order" => "DESC",
     ];
     $the_query = new WP_Query($args);
     ?>
@@ -113,15 +110,13 @@ $campaign = esc_url(home_url('/campaign'));
       $latest_campaign_args = array(
         'post_type' => 'campaign',
         'posts_per_page' => 2,
-        'orderby' => 'date',
-        'order' => 'DESC',
       );
       $latest_campaign_query = new WP_Query($latest_campaign_args);
       if ($latest_campaign_query->have_posts()) :
         while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
           $campaign_link = get_permalink();
       ?>
-          <a href="<?php the_permalink(); ?>" class="campaign-card campaign-card--aside">
+          <a href="<?php echo esc_url($campaign); ?>" class="campaign-card campaign-card--aside">
             <div class="campaign-card__img--aside">
               <?php if (has_post_thumbnail()) : ?>
                 <?php the_post_thumbnail('full'); ?>
@@ -136,14 +131,24 @@ $campaign = esc_url(home_url('/campaign'));
             </div>
             <div class="campaign-card__body campaign-card__body--aside">
               <h3 class="campaign-card__title campaign-card__title--aside"><?php the_title(); ?></h3>
-              <p class="campaign-card__text campaign-card__text--aside">全部コミコミ(お一人様)</p>
-              <div class="campaign-card__price-wrap campaign-card__price-wrap--aside">
-                <span class="campaign-card__subprice campaign-card__subprice--aside">
-                  ¥<?php echo number_format(get_field('campaign_subprice')); ?>
-                </span>
-                <span class="campaign-card__price campaign-card__price--aside">
-                  ¥<?php echo number_format(get_field('campaign_price')); ?>
-                </span>
+              <div class="campaign-card__text-wrap campaign-card__text-wrap--aside">
+                <p class=" campaign-card__text campaign-card__text--aside">全部コミコミ(お一人様)</p>
+                <div class="campaign-card__price-wrap campaign-card__price-wrap--aside">
+                  <div class="campaign-card__subprice campaign-card__subprice--aside">
+                    <span>
+                      <?php
+                      $subprice = get_field('campaign_subprice');
+                      echo '¥' . number_format($subprice);
+                      ?>
+                    </span>
+                  </div>
+                  <div class="campaign-card__price campaign-card__price--aside">
+                    <?php
+                    $price = get_field('campaign_price');
+                    echo '¥' . number_format($price);
+                    ?>
+                  </div>
+                </div>
               </div>
             </div>
           </a>

@@ -19,12 +19,11 @@ $contact = esc_url(home_url('/contact'));
 <?php get_template_part('inc/breadcrumb'); ?>
 <section class="page-voice layout-voice">
   <div class="page-voice__inner inner">
-    <!-- カテゴリーリンクの表示 -->
+    <!-- タグ -->
     <div class="page-voice_tags tags">
       <?php
       // 現在のタクソノミーまたはカテゴリーIDを取得
       $current_term_id = get_queried_object_id();
-
       // タクソノミー "voice_category" の用語一覧を取得
       $terms = get_terms([
         'taxonomy' => 'voice_category', // カスタムタクソノミーのスラッグ
@@ -60,28 +59,13 @@ $contact = esc_url(home_url('/contact'));
     <div class="page-voice-card__container ">
       <div class="voice-cards">
         <?php
-        // ページネーション対応のための設定
-        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-
-        // クエリの条件設定
-        $args = array(
-          'post_type' => 'voice',             // カスタム投稿タイプ 'voice'
-          'posts_per_page' => 6,             // 最大表示件数
-          'paged' => $paged,                 // ページネーション対応
-          'orderby' => 'date',               // 日付順
-          'order' => 'DESC',                 // 降順
-          'tax_query' => $current_term_id ? array( // 現在のタクソノミーに関連する投稿を取得
-            array(
-              'taxonomy' => 'voice_category',
-              'field' => 'term_id',
-              'terms' => $current_term_id,
-            ),
-          ) : '', // 全体表示時はフィルタなし
-        );
-
-        $query = new WP_Query($args); // 投稿を取得
-        if ($query->have_posts()) :
-          while ($query->have_posts()) : $query->the_post(); ?>
+        // メインループの開始
+        // 投稿が存在するかを確認
+        if (have_posts()) : ?>
+          <?php
+          // 投稿が存在する間、ループを繰り返す
+          while (have_posts()) : the_post(); // 現在の投稿データをセットアップ
+          ?>
 
             <div class="voice-cards__item">
               <div class="voice-card">
@@ -145,7 +129,6 @@ $contact = esc_url(home_url('/contact'));
               </div>
             </div>
 
-
           <?php endwhile;
           wp_reset_postdata();
         else : ?>
@@ -153,41 +136,12 @@ $contact = esc_url(home_url('/contact'));
         <?php endif; ?>
       </div>
     </div>
+
     <!-- ページネーション -->
     <div class="pagination page-blog__pagination">
       <div class="pagination__wrap">
         <div class="wp-pagenavi">
-          <?php
-          global $wp_query;
-
-          // 総ページ数と現在のページを取得
-          $total_pages = $wp_query->max_num_pages;
-          $current_page = max(1, get_query_var('paged'));
-
-          // 前のページリンク
-          if ($current_page > 1) {
-            echo '<a class="previouspostslink" rel="prev" href="' . esc_url(get_pagenum_link($current_page - 1)) . '">＜</a>';
-          }
-
-          // 中央のページリンクを生成
-          $pagination_links = paginate_links(array(
-            'total' => $total_pages,
-            'current' => $current_page,
-            'type' => 'array',
-            'mid_size' => 2,
-            'prev_next' => false,
-          ));
-
-          if (!empty($pagination_links)) {
-            foreach ($pagination_links as $link) {
-              echo $link;
-            }
-          }
-          // 次のページリンク
-          if ($current_page < $total_pages) {
-            echo '<a class="nextpostslink" rel="next" href="' . esc_url(get_pagenum_link($current_page + 1)) . '">＞</a>';
-          }
-          ?>
+          <?php wp_pagenavi(); ?>
         </div>
       </div>
     </div>

@@ -21,13 +21,11 @@ $contact = esc_url(home_url('/contact'));
 
 <section class="page-campaign layout-campaign">
   <div class="page-campaign__inner inner">
-    <!-- カテゴリーリンクの表示 -->
+    <!-- タグ -->
     <div class="page-campaign_tags tags">
       <?php
       // 現在のタクソノミーまたはカテゴリーIDを取得
       $current_term_id = get_queried_object_id();
-
-      // タクソノミー "campaign_category" の用語一覧を取得
       $terms = get_terms([
         'taxonomy' => 'campaign_category',
         'orderby' => 'name',
@@ -36,7 +34,6 @@ $contact = esc_url(home_url('/contact'));
       ]);
 
       if (!empty($terms) && !is_wp_error($terms)) :
-        // 「All」リンク生成
         $all_class = (!$current_term_id || is_post_type_archive('campaign')) ? 'active' : '';
         echo sprintf(
           '<a href="%s" class="tags__item %s">All</a>',
@@ -44,9 +41,8 @@ $contact = esc_url(home_url('/contact'));
           esc_attr($all_class)
         );
 
-        // 各タクソノミー用語のリンク生成
         foreach ($terms as $term) {
-          $term_class = ($current_term_id === $term->term_id) ? 'active' : '';
+          $term_class = is_tax('campaign_category', $term->term_id) ? 'is-active' : '';
           echo sprintf(
             '<a href="%s" class="tags__item %s">%s</a>',
             esc_url(get_term_link($term->term_id, 'campaign_category')),
@@ -57,25 +53,17 @@ $contact = esc_url(home_url('/contact'));
       endif;
       ?>
     </div>
+
     <!-- 投稿カード -->
     <div class="page-campaign__cards campaign-cards">
       <div class="campaign-cards__inner">
-        <?php
-        // メインループの開始
-        // 投稿が存在するかを確認
-        if (have_posts()) : ?>
-          <?php
-          // 投稿が存在する間、ループを繰り返す
-          while (have_posts()) : the_post(); // 現在の投稿データをセットアップ
-          ?>
+        <?php if (have_posts()) : ?>
+          <?php while (have_posts()) : the_post(); ?>
             <div class="campaign-card campaign-card--big">
               <div class="campaign-card__img">
-                <?php if (has_post_thumbnail()) : //投稿にアイキャッチ画像が設定されているか確認
-                ?>
-                  <?php the_post_thumbnail('full'); //// アイキャッチ画像を表示
-                  ?>
+                <?php if (has_post_thumbnail()) : ?>
+                  <?php the_post_thumbnail('full'); ?>
                 <?php else : ?>
-                  <!-- 画像がない場合のデフォルト画像 -->
                   <img
                     src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/common/noimage.jpg"
                     alt="noimage"
@@ -127,11 +115,10 @@ $contact = esc_url(home_url('/contact'));
                     <div class="campaign-card__text-info">
                       <p>
                         <?php
-                        $content = get_the_content();
-                        if (mb_strlen($content, 'UTF-8') > 200) {
-                          $content = mb_substr($content, 0, 200, 'UTF-8') . '...';
-                        }
-                        echo esc_html($content);
+                        $content = wp_strip_all_tags(get_the_content());
+                        echo mb_strlen($content, 'UTF-8') > 200
+                          ? mb_substr($content, 0, 200, 'UTF-8') . '...'
+                          : $content;
                         ?>
                       </p>
                     </div>
@@ -150,10 +137,8 @@ $contact = esc_url(home_url('/contact'));
                 </div>
               </div>
             </div>
-          <?php endwhile; // メインループの終了
-          ?>
+          <?php endwhile; ?>
         <?php else : ?>
-          <!-- 投稿がない場合の表示 -->
           <p>キャンペーンが見つかりませんでした。</p>
         <?php endif; ?>
       </div>
@@ -163,18 +148,11 @@ $contact = esc_url(home_url('/contact'));
     <div class="pagination page-campaign__pagination">
       <div class="pagination__wrap">
         <div class="wp-pagenavi">
-          <?php
-          the_posts_pagination([
-            'prev_text' => '＜',
-            'next_text' => '＞',
-            'mid_size' => 2,
-          ]);
-          ?>
+          <?php wp_pagenavi(); ?>
         </div>
       </div>
     </div>
   </div>
 </section>
-
 
 <?php get_footer(); ?>

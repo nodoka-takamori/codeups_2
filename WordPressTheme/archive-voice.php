@@ -146,13 +146,7 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
     <div class="pagination page-voice__pagination">
       <div class="pagination__wrap">
         <div class="wp-pagenavi">
-          <?php
-          the_posts_pagination([
-            'prev_text' => '＜',
-            'next_text' => '＞',
-            'mid_size' => 2,
-          ]);
-          ?>
+          <?php wp_pagenavi(); ?>
         </div>
       </div>
     </div>

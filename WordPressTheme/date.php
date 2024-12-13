@@ -6,9 +6,10 @@ $home = esc_url(home_url('/'));
 $contact = esc_url(home_url('/contact'));
 ?>
 <?php get_header(); ?>
+
 <section class="blog__mv mv">
   <div class="mv__title-wrap">
-    <p class="mv__title">Blog</p>
+    <p class="mv__title"><?php the_archive_title(); ?></p>
   </div>
   <picture class="mv__photo">
     <source
@@ -19,7 +20,9 @@ $contact = esc_url(home_url('/contact'));
       alt="2匹の黄色の熱帯魚が海で泳いでいる" />
   </picture>
 </section>
+
 <?php get_template_part('inc/breadcrumb'); ?>
+
 <div class="page-blog layout-blog">
   <div class="page-blog__inner inner">
     <!-- メイン -->
@@ -47,51 +50,34 @@ $contact = esc_url(home_url('/contact'));
                   </div>
                   <p class="blog-card__text">
                     <?php
-                    // 投稿本文を取得
-                    // $postオブジェクトには、その投稿に関連するさまざまな情報が格納されている
-                    // post_contentは、投稿オブジェクト（$post）のプロパティの一つで、その投稿の本文（記事の内容）が保存されている
                     $content = $post->post_content;
-
-                    // 文字数を制限（ここでは110文字 → これでカンプの文字数と一致する）
-                    // mb_strlen: 文字数を数える関数。UTF-8を指定することで日本語を正しく数えられる
                     if (mb_strlen($content, 'UTF-8') > 110) {
-                      // mb_substr: 文字列の一部を取り出す関数（110文字取り出す）
                       $content = mb_substr($content, 0, 110, 'UTF-8') . '...';
                     }
-
-                    // コメントや不要なタグを削除（HTMLタグは維持してもOKなら、2番目のパラメータに指定 → <p>タグOKだと.blog-card__textの外に<p>タグができてそこにテキストが入ってしまう！）
                     $content = strip_tags($content);
-
-                    // 改行を<br>タグに変換 → <br>タグがテキストの上にできてしまう！
-                    // $content_with_breaks = nl2br($content);
-
-                    // 整形したコンテンツを出力
                     echo $content;
                     ?>
                   </p>
                 </div>
               </a>
             </div>
-        <?php endwhile;
-        endif; ?>
+          <?php endwhile; ?>
+        <?php endif; ?>
       </div>
+
       <!-- ページネーション -->
       <div class="pagination page-blog__pagination">
         <div class="pagination__wrap">
           <div class="wp-pagenavi">
             <?php
             global $wp_query;
-
-            // 総ページ数と現在のページを取得
             $total_pages = $wp_query->max_num_pages;
             $current_page = max(1, get_query_var('paged'));
 
-            // 前のページリンク
             if ($current_page > 1) {
               echo '<a class="previouspostslink" rel="prev" href="' . esc_url(get_pagenum_link($current_page - 1)) . '">＜</a>';
             }
 
-            // 中央のページリンクを生成
             $pagination_links = paginate_links(array(
               'total' => $total_pages,
               'current' => $current_page,
@@ -106,7 +92,6 @@ $contact = esc_url(home_url('/contact'));
               }
             }
 
-            // 次のページリンク
             if ($current_page < $total_pages) {
               echo '<a class="nextpostslink" rel="next" href="' . esc_url(get_pagenum_link($current_page + 1)) . '">＞</a>';
             }
@@ -115,8 +100,12 @@ $contact = esc_url(home_url('/contact'));
         </div>
       </div>
     </section>
+
     <!-- アサイド -->
     <aside class="page-blog__aside aside">
       <?php get_sidebar(); ?>
     </aside>
-    <?php get_footer(); ?>
+  </div>
+</div>
+
+<?php get_footer(); ?>

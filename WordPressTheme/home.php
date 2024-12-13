@@ -92,35 +92,7 @@ $contact = esc_url(home_url('/contact'));
       <div class="pagination page-blog__pagination">
         <div class="pagination__wrap">
           <div class="wp-pagenavi">
-            <?php
-            global $wp_query;
-            // 総ページ数を取得
-            $total_pages = $wp_query->max_num_pages;
-            // 現在のページ番号を取得
-            $current_page = max(1, get_query_var('paged'));
-            // 前のページリンクを表示
-            if ($current_page > 1) {
-              echo '<a class="previouspostslink" rel="prev" href="' . esc_url(get_pagenum_link($current_page - 1)) . '">＜</a>';
-            }
-            // ページ番号のリンクを生成
-            $pagination_links = paginate_links(array(
-              'total' => $total_pages, // 総ページ数
-              'current' => $current_page, // 現在のページ
-              'type' => 'array', // 配列形式でリンクを取得
-              'mid_size' => 2, // 現在のページの前後に表示するリンク数
-              'prev_next' => false, // 前後リンクを非表示にする
-            ));
-            // 生成したページリンクをループで表示
-            if (!empty($pagination_links)) {
-              foreach ($pagination_links as $link) {
-                echo $link;
-              }
-            }
-            // 次のページリンクを表示
-            if ($current_page < $total_pages) {
-              echo '<a class="nextpostslink" rel="next" href="' . esc_url(get_pagenum_link($current_page + 1)) . '">＞</a>';
-            }
-            ?>
+            <?php wp_pagenavi(); ?>
           </div>
         </div>
       </div>

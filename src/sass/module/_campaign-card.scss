@@ -215,7 +215,8 @@ line-height: 1.5;
     gap: rem(40);
   }
 }
-.campaign-card__subprice--big span {
+.campaign-card__subprice--big span,
+.campaign-card__subprice--aside span {
   @include mq("md") {
     margin-left: 0;
   }
