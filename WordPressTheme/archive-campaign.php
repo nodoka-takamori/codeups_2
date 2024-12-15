@@ -96,19 +96,27 @@ $contact = esc_url(home_url('/contact'));
                 <div class="campaign-card__text-wrap campaign-card__text-wrap--big">
                   <p class="campaign-card__text">全部コミコミ(お一人様)</p>
                   <div class="campaign-card__price-wrap campaign-card__price-wrap--big">
-                    <div class="campaign-card__subprice campaign-card__subprice--big">
-                      <span>
-                        <?php
-                        $subprice = get_field('campaign_subprice');
-                        echo '¥' . number_format($subprice);
-                        ?>
-                      </span>
+                    <?php
+                    // サブプライスの処理
+                    $subprice = get_field('campaign_subprice');
+                    $subprice_class = empty($subprice) ? 'is-hidden' : ''; // サブプライスがない場合にクラスを付与
+                    ?>
+                    <div class="campaign-card__subprice campaign-card__subprice--big <?php echo $subprice_class; ?>">
+                      <?php if (!empty($subprice)) : ?>
+                        <span>
+                          <?php echo '¥' . number_format($subprice); ?>
+                        </span>
+                      <?php endif; ?>
                     </div>
-                    <div class="campaign-card__price">
-                      <?php
-                      $price = get_field('campaign_price');
-                      echo '¥' . number_format($price);
-                      ?>
+                    <?php
+                    // プライスの処理
+                    $price = get_field('campaign_price');
+                    $price_class = empty($price) ? 'is-hidden' : ''; // プライスがない場合にクラスを付与
+                    ?>
+                    <div class="campaign-card__price <?php echo $price_class; ?>">
+                      <?php if (!empty($price)) : ?>
+                        <?php echo '¥' . number_format($price); ?>
+                      <?php endif; ?>
                     </div>
                   </div>
                   <div class="campaign-card__text-wrapper campaign-card__text-wrapper--big">
@@ -139,10 +147,12 @@ $contact = esc_url(home_url('/contact'));
             </div>
           <?php endwhile; ?>
         <?php else : ?>
-          <p>キャンペーンが見つかりませんでした。</p>
+          <p>キャンペーンはありません。</p>
         <?php endif; ?>
       </div>
     </div>
+
+
 
     <!-- ページネーション -->
     <div class="pagination page-campaign__pagination">

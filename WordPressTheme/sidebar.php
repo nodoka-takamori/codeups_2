@@ -76,12 +76,17 @@ $campaign = esc_url(home_url('/campaign'));
               <div class="aside__voice-meta">
                 <p class="aside__voice-age">
                   <?php
-                  $age = get_field('age');
+                  // 年齢と性別を取得
+                  $age = get_field('age'); // 年齢
+                  $sex = get_field('sex'); // 性別
                   echo $age ? esc_html($age) : '年齢情報なし';
-                  ?>
-                  <?php
-                  $sex = get_field('sex');
-                  echo $sex ? esc_html($sex) : '性別情報なし';
+
+                  // 性別がある場合のみ括弧で囲んで表示
+                  if ($sex) {
+                    echo ' (' . esc_html($sex) . ')';
+                  } else {
+                    echo ' (性別情報なし)';
+                  }
                   ?>
                 </p>
                 <p class="aside__voice-title"><?php the_title(); ?></p>
@@ -105,17 +110,18 @@ $campaign = esc_url(home_url('/campaign'));
     <div class="aside__title-line">
       <h2 class="aside__title">キャンペーン</h2>
     </div>
-    <div class="aside__container aside__campaign-container">
-      <?php
-      $latest_campaign_args = array(
-        'post_type' => 'campaign',
-        'posts_per_page' => 2,
-      );
-      $latest_campaign_query = new WP_Query($latest_campaign_args);
-      if ($latest_campaign_query->have_posts()) :
-        while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
-          $campaign_link = get_permalink();
-      ?>
+    <!-- 最新の投稿2件を取得する -->
+    <?php
+    $latest_campaign_query = new WP_Query([
+      'post_type' => 'campaign',
+      'posts_per_page' => 2,
+    ]);
+
+    if ($latest_campaign_query->have_posts()) :
+      while ($latest_campaign_query->have_posts()) : $latest_campaign_query->the_post();
+    ?>
+        <div class="aside__container aside__campaign-container">
+
           <a href="<?php echo esc_url($campaign); ?>" class="campaign-card campaign-card--aside">
             <div class="campaign-card__img--aside">
               <?php if (has_post_thumbnail()) : ?>
@@ -134,19 +140,27 @@ $campaign = esc_url(home_url('/campaign'));
               <div class="campaign-card__text-wrap campaign-card__text-wrap--aside">
                 <p class=" campaign-card__text campaign-card__text--aside">全部コミコミ(お一人様)</p>
                 <div class="campaign-card__price-wrap campaign-card__price-wrap--aside">
-                  <div class="campaign-card__subprice campaign-card__subprice--aside">
-                    <span>
-                      <?php
-                      $subprice = get_field('campaign_subprice');
-                      echo '¥' . number_format($subprice);
-                      ?>
-                    </span>
+                  <?php
+                  // サブプライスの処理
+                  $subprice = get_field('campaign_subprice');
+                  $subprice_class = empty($subprice) ? 'is-hidden' : ''; // サブプライスがない場合にクラスを付与
+                  ?>
+                  <div class="campaign-card__subprice campaign-card__subprice--aside <?php echo $subprice_class; ?>">
+                    <?php if (!empty($subprice)) : ?>
+                      <span>
+                        <?php echo '¥' . number_format($subprice); ?>
+                      </span>
+                    <?php endif; ?>
                   </div>
-                  <div class="campaign-card__price campaign-card__price--aside">
-                    <?php
-                    $price = get_field('campaign_price');
-                    echo '¥' . number_format($price);
-                    ?>
+                  <?php
+                  // プライスの処理
+                  $price = get_field('campaign_price');
+                  $price_class = empty($price) ? 'is-hidden' : ''; // プライスがない場合にクラスを付与
+                  ?>
+                  <div class="campaign-card__price <?php echo $price_class; ?>">
+                    <?php if (!empty($price)) : ?>
+                      <?php echo '¥' . number_format($price); ?>
+                    <?php endif; ?>
                   </div>
                 </div>
               </div>
@@ -155,12 +169,12 @@ $campaign = esc_url(home_url('/campaign'));
         <?php endwhile; ?>
         <?php wp_reset_postdata(); ?>
       <?php endif; ?>
-    </div>
-    <div class="aside__campaign-button">
-      <a href="<?php echo $campaign; ?>" class="button">
-        Viewmore<span class="arrow"></span>
-      </a>
-    </div>
+        </div>
+        <div class="aside__campaign-button">
+          <a href="<?php echo $campaign; ?>" class="button">
+            Viewmore<span class="arrow"></span>
+          </a>
+        </div>
   </div>
 
   <div class="aside__archive">

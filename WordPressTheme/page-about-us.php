@@ -56,40 +56,63 @@ $contact = esc_url(home_url('/contact'));
   </div>
 </section>
 <!-- ギャラリー -->
-<section class="gallery layout-gallery">
-  <div class="gallery__inner inner">
-    <div class="about__title section-header">
-      <p class="section-header__title">Gallery</p>
-      <h2 class="section-header__subtitle">フォト</h2>
-    </div>
-    <div class="gallery__photo-container">
-      <?php
-      // SCFからギャラリー画像のリストを取得
-      $gallery_photos = SCF::get('gallery_photos');
-      if ($gallery_photos) :
+
+<?php
+// SCFからギャラリー画像リストを取得
+$gallery_photos = SCF::get('gallery_photos', get_the_ID());
+
+// 画像が存在するかをチェック
+$has_image = false;
+
+if (!empty($gallery_photos)) {
+  // ギャラリー画像リスト内の各フィールドを確認
+  foreach ($gallery_photos as $photo) {
+    if (!empty($photo['gallery_photo_pc']) || !empty($photo['gallery_photo_sp'])) {
+      $has_image = true; // 画像が1枚でもあればフラグをtrueに
+      break; // チェックが終わったらループを終了
+    }
+  }
+}
+
+// 画像がある場合のみセクションを表示
+if ($has_image) :
+?>
+  <section class="gallery layout-gallery">
+    <div class="gallery__inner inner">
+      <div class="about__title section-header">
+        <p class="section-header__title">Gallery</p>
+        <h2 class="section-header__subtitle">フォト</h2>
+      </div>
+      <div class="gallery__photo-container">
+        <?php
+        // ギャラリー画像リストをループで処理
         foreach ($gallery_photos as $photo) :
-          // 画像IDからURLを取得
+          // 各画像のPC用URLとSP用URLを取得
           $photo_pc = wp_get_attachment_image_url($photo['gallery_photo_pc'], 'full');
           $photo_sp = wp_get_attachment_image_url($photo['gallery_photo_sp'], 'full');
-      ?>
+
+          // 画像がない場合はスキップ
+          if (empty($photo_pc) && empty($photo_sp)) {
+            continue;
+          }
+        ?>
           <picture class="gallery__photo">
             <source srcset="<?php echo esc_url($photo_sp); ?>" media="(max-width:768px)" />
             <img src="<?php echo esc_url($photo_pc); ?>" alt="ギャラリー画像" />
           </picture>
-      <?php
-        endforeach;
-      else :
-        echo '<p>ギャラリー画像は現在ございません。</p>';
-      endif;
-      ?>
+        <?php endforeach; ?>
+      </div>
     </div>
-  </div>
-  <!-- モーダル -->
-  <div id="js-modal" class="modal js-sp-nav">
-    <div class="modal__content">
-      <img id="js-modal-img" src="" alt="拡大画像" class="modal__image" />
+    <!-- モーダル -->
+    <div id="js-modal" class="modal js-sp-nav">
+      <div class="modal__content">
+        <img id="js-modal-img" src="" alt="拡大画像" class="modal__image" />
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+<?php endif; ?>
+
+
+
 
 <?php get_footer(); ?>

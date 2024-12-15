@@ -60,15 +60,14 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
     </div>
 
     <!-- 投稿カード -->
-    <div class="page-voice-card__container ">
+    <div class="page-voice-card__container">
       <div class="voice-cards">
         <?php
         // メインループの開始
-        // 投稿が存在するかを確認
         if (have_posts()) : ?>
           <?php
           // 投稿が存在する間、ループを繰り返す
-          while (have_posts()) : the_post(); // 現在の投稿データをセットアップ
+          while (have_posts()) : the_post();
           ?>
 
             <div class="voice-cards__item">
@@ -82,8 +81,13 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
                         $age = get_field('age'); // 年齢
                         $sex = get_field('sex'); // 性別
                         echo $age ? esc_html($age) : '年齢情報なし';
-                        echo ' / ';
-                        echo $sex ? esc_html($sex) : '性別情報なし';
+
+                        // 性別がある場合のみ括弧で囲んで表示
+                        if ($sex) {
+                          echo ' (' . esc_html($sex) . ')';
+                        } else {
+                          echo ' (性別情報なし)';
+                        }
                         ?>
                       </p>
                       <div class="voice-card__category-wrap">
@@ -123,7 +127,6 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
                     $content = wp_strip_all_tags($content);
                     // 文字数を制限
                     if (mb_strlen($content, 'UTF-8') > 250) {
-                      // mb_substr: 文字列の一部を取り出す関数
                       $content = mb_substr($content, 0, 250, 'UTF-8') . '...';
                     }
                     echo $content;
@@ -133,7 +136,6 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
               </div>
             </div>
 
-
           <?php endwhile;
           wp_reset_postdata();
         else : ?>
@@ -141,6 +143,7 @@ $contact = esc_url(home_url('/contact')); // お問い合わせページのURL�
         <?php endif; ?>
       </div>
     </div>
+
 
     <!-- ページネーション -->
     <div class="pagination page-voice__pagination">

@@ -20,51 +20,58 @@ $contact = esc_url(home_url('/contact'));
   <div class="page-price__inner inner">
     <div class="page-price__container price-lists">
       <?php
-      // 繰り返し対象のテーブルデータをループで処理
-      for ($i = 1; $i <= 4; $i++) {
-        // 単一フィールドと繰り返しフィールドの取得
+      // SCFから繰り返し対象のテーブルデータをループで処理
+      for ($i = 1; $i <= 10; $i++) {
+        // テーブルタイトルと価格データを取得
         $table_title = SCF::get("table_title{$i}");
         $prices = SCF::get("prices_{$i}");
-
-        // タイトルが設定されている場合は出力
-        if (!empty($table_title)) :
+        // タイトルがない場合はスキップ（表示しない）
+        if (empty($table_title)) {
+          continue;
+        }
       ?>
-          <div class="price-lists__item price-list">
-            <h2 id="price<?php echo $i; ?>" class="price-list__title">
-              <?php echo esc_html($table_title); ?>
-            </h2>
-            <?php
-            // 繰り返しフィールドが空でない場合はテーブルを出力
-            if (!empty($prices)) :
-            ?>
-              <table class="price-list__table">
-                <tbody>
-                  <?php foreach ($prices as $price_item) : ?>
-                    <tr>
-                      <td class="price-list__sub-title">
-                        <?php
-                        // テキストフィールドを取得し改行を置換
-                        $text = $price_item["text_{$i}"];
-                        $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text));
-                        echo $formatted_text;
-                        ?>
-                      </td>
-                      <td class="price__price">
-                        <?php echo esc_html($price_item["price_{$i}"]); ?>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php endif; ?>
-          </div>
+        <div class="price-lists__item price-list">
+          <h2 id="price<?php echo $i; ?>" class="price-list__title">
+            <?php echo esc_html($table_title); ?>
+          </h2>
+          <!-- 価格データが存在する場合のみテーブルを表示 -->
+          <?php if (!empty($prices)) : ?>
+            <table class="price-list__table">
+              <tbody>
+                <?php foreach ($prices as $price_item) : ?>
+                  <?php
+                  // text_{$i} と price_{$i} のどちらかが空ならその行をスキップ
+                  $text = $price_item["text_{$i}"] ?? '';
+                  $price = $price_item["price_{$i}"] ?? '';
+                  // テキストまたは価格が空の場合、この行をスキップ（表示しない）
+                  if (empty($text) || empty($price)) {
+                    continue;
+                  }
+                  ?>
+                  <tr>
+                    <td class="price-list__sub-title">
+                      <?php
+                      // テキストフィールドを取得し改行を置換
+                      $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text));
+                      echo $formatted_text;
+                      ?>
+                    </td>
+                    <td class="price__price">
+                      <?php echo esc_html($price); ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          <?php endif; ?>
+        </div>
       <?php
-        endif;
       }
       ?>
     </div>
   </div>
-
 </div>
+
+
 
 <?php get_footer(); ?>

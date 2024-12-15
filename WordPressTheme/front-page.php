@@ -127,19 +127,27 @@ $contact = esc_url(home_url('/contact'));
                     <div class="campaign-card__text-wrap">
                       <p class="campaign-card__text">全部コミコミ(お一人様)</p>
                       <div class="campaign-card__price-wrap">
-                        <div class="campaign-card__subprice">
-                          <span>
-                            <?php
-                            $price = get_field('campaign_subprice');
-                            echo '¥' . number_format($price);
-                            ?>
-                          </span>
+                        <?php
+                        // サブプライスの処理
+                        $subprice = get_field('campaign_subprice');
+                        $subprice_class = empty($subprice) ? 'is-hidden' : ''; // サブプライスがない場合にクラスを付与
+                        ?>
+                        <div class="campaign-card__subprice campaign-card__subprice--big <?php echo $subprice_class; ?>">
+                          <?php if (!empty($subprice)) : ?>
+                            <span>
+                              <?php echo '¥' . number_format($subprice); ?>
+                            </span>
+                          <?php endif; ?>
                         </div>
-                        <div class="campaign-card__price">
-                          <?php
-                          $price = get_field('campaign_price');
-                          echo '¥' . number_format($price);
-                          ?>
+                        <?php
+                        // プライスの処理
+                        $price = get_field('campaign_price');
+                        $price_class = empty($price) ? 'is-hidden' : ''; // プライスがない場合にクラスを付与
+                        ?>
+                        <div class="campaign-card__price <?php echo $price_class; ?>">
+                          <?php if (!empty($price)) : ?>
+                            <?php echo '¥' . number_format($price); ?>
+                          <?php endif; ?>
                         </div>
                       </div>
                     </div>
@@ -317,14 +325,17 @@ $contact = esc_url(home_url('/contact'));
                       <div class="voice-card__category-wrapper">
                         <p class="voice-card__age">
                           <?php
-                          // 年齢を表示（カスタムフィールド 'age' の値を取得）
-                          $age = get_field('age'); // Advanced Custom Fields (ACF) の値を取得
-                          echo $age ? esc_html($age) : '年齢情報なし'; // 値が存在する場合は表示、存在しない場合は「年齢情報なし」を表示
-                          ?>
-                          <?php
-                          // 性別を表示（カスタムフィールド 'sex' の値を取得）
-                          $sex = get_field('sex'); // ACF の値を取得
-                          echo $sex ? esc_html($sex) : '性別情報なし'; // 値が存在する場合は表示、存在しない場合は「性別情報なし」を表示
+                          // 年齢と性別を取得
+                          $age = get_field('age'); // 年齢
+                          $sex = get_field('sex'); // 性別
+                          echo $age ? esc_html($age) : '年齢情報なし';
+
+                          // 性別がある場合のみ括弧で囲んで表示
+                          if ($sex) {
+                            echo ' (' . esc_html($sex) . ')';
+                          } else {
+                            echo ' (性別情報なし)';
+                          }
                           ?>
                         </p>
                         <div class="voice-card__category-wrap">
@@ -397,59 +408,57 @@ $contact = esc_url(home_url('/contact'));
       <div class="price__container">
         <div class="price__contents price-lists">
           <?php
-          // テーブル情報を動的に出力
-          for ($i = 1; $i <= 4; $i++) {
-            // 単一フィールドと繰り返しフィールドを取得
-            $table_title = SCF::get("table_title{$i}", 18);
+          // SCFから繰り返しフィールドのデータを取得
+          for ($i = 1; $i <= 10; $i++) {
+            // テーブルタイトルと価格データを取得
+            $table_title = SCF::get("table_title{$i}", 18); // '18'は投稿ID、必要に応じて変更
             $prices = SCF::get("prices_{$i}", 18);
-
-            // タイトルが設定されている場合は出力、それ以外はデフォルトメッセージ
-            if (!empty($table_title)) :
+            // タイトルがない場合、このテーブルをスキップ（表示しない）
+            if (empty($table_title)) {
+              continue;
+            }
           ?>
-              <div class="price__lists-items">
-                <h2 id="price<?php echo $i; ?>" class="price__list-title">
-                  <?php echo esc_html($table_title); ?>
-                </h2>
-              <?php else : ?>
-                <div class="price__lists-items">
-                  <h2 id="price<?php echo $i; ?>" class="price__list-title">
-                    情報がありません。
-                  </h2>
-                <?php endif; ?>
-
-                <?php
-                // 繰り返しフィールドが空の場合「情報がありません」を表示
-                if (!empty($prices)) :
-                ?>
-                  <dl class="price__list">
-                    <?php foreach ($prices as $price_item) : ?>
-                      <?php if (!empty($price_item["text_{$i}"]) && !empty($price_item["price_{$i}"])) : ?>
-                        <div class="price__list-item">
-                          <dt>
-                            <?php echo esc_html($price_item["text_{$i}"]); ?>
-                          </dt>
-                          <dd>
-                            <?php echo esc_html($price_item["price_{$i}"]); ?>
-                          </dd>
-                        </div>
-                      <?php else : ?>
-                        <div class="price__list-item">
-                          <dt>情報がありません。</dt>
-                          <dd>情報がありません。</dd>
-                        </div>
-                      <?php endif; ?>
-                    <?php endforeach; ?>
-                  </dl>
-                </div>
-              <?php else : ?>
-                <p class="price__list-message">情報がありません。</p>
-              </div>
-            <?php endif; ?>
+            <div class="price__lists-items">
+              <h2 id="price<?php echo $i; ?>" class="price__list-title">
+                <?php echo esc_html($table_title); ?>
+              </h2>
+              <?php
+              // 価格データが存在する場合のみテーブルを表示
+              if (!empty($prices)) :
+              ?>
+                <dl class="price__list">
+                  <?php
+                  foreach ($prices as $price_item) {
+                    // 各項目のテキストと価格を取得
+                    $text = $price_item["text_{$i}"] ?? '';
+                    $price = $price_item["price_{$i}"] ?? '';
+                    // テキストまたは価格が空の場合、この行をスキップ（表示しない）
+                    if (empty($text) || empty($price)) {
+                      continue;
+                    }
+                  ?>
+                    <div class="price__list-item">
+                      <dt>
+                        <?php
+                        // テキストフィールドを取得し改行を置換
+                        $formatted_text = str_replace("\n", '<br class="is-sp">', esc_html($text));
+                        echo $formatted_text;
+                        ?>
+                      </dt>
+                      <dd>
+                        <?php echo esc_html($price); ?>
+                      </dd>
+                    </div>
+                  <?php
+                  }
+                  ?>
+                </dl>
+              <?php endif; ?>
+            </div>
           <?php
           } // for文の終了
           ?>
         </div>
-
         <div class="price__photo colorbox js-colorbox">
           <picture>
             <source
@@ -461,6 +470,7 @@ $contact = esc_url(home_url('/contact'));
           </picture>
         </div>
       </div>
+
       <div class="price__button">
         <a href="<?php echo esc_url($price); ?>" class="button">Viewmore<span class="arrow"></span></a>
       </div>
