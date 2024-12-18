@@ -111,16 +111,19 @@ $contact = esc_url(home_url('/contact'));
                   </picture>
                   <div class="campaign-card__body">
                     <div class="campaign-card__title-container">
+                      <!-- カテゴリー表示 -->
                       <div class="campaign-card__category-wrap">
                         <?php
-                        if (!empty($post_terms)) {
-                          foreach ($post_terms as $post_term) {
-                            echo '<div class="campaign-card__category">' . esc_html($post_term->name) . '</div>';
-                          }
-                        }
-                        ?>
+                        // 投稿に関連付けられたカテゴリーを取得
+                        $post_terms = get_the_terms(get_the_ID(), 'campaign_category');
+                        if (!empty($post_terms) && !is_wp_error($post_terms)) :
+                          foreach ($post_terms as $post_term) : ?>
+                            <div class="campaign-card__category"><?php echo esc_html($post_term->name); ?></div>
+                        <?php endforeach;
+                        endif; ?>
                       </div>
-                      <h3 class="campaign-card__title">
+                      <!-- キャンペーンタイトル -->
+                      <h3 class="campaign-card__title campaign-card__title--big">
                         <?php the_title(); ?>
                       </h3>
                     </div>
@@ -128,27 +131,22 @@ $contact = esc_url(home_url('/contact'));
                       <p class="campaign-card__text">全部コミコミ(お一人様)</p>
                       <div class="campaign-card__price-wrap">
                         <?php
-                        // サブプライスの処理
+                        // サブプライス（オプション価格）の取得と表示
                         $subprice = get_field('campaign_subprice');
-                        $subprice_class = empty($subprice) ? 'is-hidden' : ''; // サブプライスがない場合にクラスを付与
-                        ?>
-                        <div class="campaign-card__subprice campaign-card__subprice--big <?php echo $subprice_class; ?>">
-                          <?php if (!empty($subprice)) : ?>
-                            <span>
-                              <?php echo '¥' . number_format($subprice); ?>
-                            </span>
-                          <?php endif; ?>
-                        </div>
-                        <?php
-                        // プライスの処理
+                        // $subprice が空ではない場合
+                        if (!empty($subprice)) : ?>
+                          <div class="campaign-card__subprice campaign-card__subprice--big">
+                            <span><?php echo '¥' . number_format($subprice); ?></span>
+                          </div>
+                        <?php endif;
+                        // メインプライス（価格）の取得と表示
                         $price = get_field('campaign_price');
-                        $price_class = empty($price) ? 'is-hidden' : ''; // プライスがない場合にクラスを付与
-                        ?>
-                        <div class="campaign-card__price <?php echo $price_class; ?>">
-                          <?php if (!empty($price)) : ?>
+                        // $price が空ではない場合
+                        if (!empty($price)) : ?>
+                          <div class="campaign-card__price">
                             <?php echo '¥' . number_format($price); ?>
-                          <?php endif; ?>
-                        </div>
+                          </div>
+                        <?php endif; ?>
                       </div>
                     </div>
                   </div>
@@ -303,34 +301,40 @@ $contact = esc_url(home_url('/contact'));
   <!-- voiceセクション -->
   <section class="voice top-voice">
     <div class="inner">
+      <!-- セクションタイトル -->
       <div class="voice__title section-header">
         <p class="section-header__title">Voice</p>
         <h2 class="section-header__subtitle">お客様の声</h2>
       </div>
+
+      <!-- カード全体のコンテナ -->
       <div class="voice-card__container">
         <div class="voice-cards">
           <?php
-          // 最新の投稿2件を取得する
+          // 最新の投稿2件を取得するためのカスタムクエリ
           $latest_posts_query = new WP_Query([
-            'post_type' => 'voice',   // カスタム投稿タイプ 'voice' を指定
-            'posts_per_page' => 2, // 表示する投稿数を2件に設定
+            'post_type' => 'voice', // 投稿タイプ 'voice'（カスタム投稿）を指定
+            'posts_per_page' => 2,  // 表示する投稿数を2件に設定
           ]);
+
+          // 投稿が存在する場合
           if ($latest_posts_query->have_posts()) :
+            // ループ処理の開始
             while ($latest_posts_query->have_posts()) : $latest_posts_query->the_post();
           ?>
+              <!-- 各投稿のカード -->
               <div class="voice-cards__item">
-                <a href="<?php echo $voice; ?> " class="voice-card"> <!-- 投稿のリンクを出力 -->
+                <!-- 投稿全体のリンク -->
+                <a href="<?php echo $voice; ?>" class="voice-card">
                   <div class="voice-card__head">
                     <div class="voice-card__title-container">
                       <div class="voice-card__category-wrapper">
+                        <!-- 年齢と性別の情報を取得 -->
                         <p class="voice-card__age">
                           <?php
-                          // 年齢と性別を取得
                           $age = get_field('age'); // 年齢
                           $sex = get_field('sex'); // 性別
                           echo $age ? esc_html($age) : '年齢情報なし';
-
-                          // 性別がある場合のみ括弧で囲んで表示
                           if ($sex) {
                             echo ' (' . esc_html($sex) . ')';
                           } else {
@@ -338,30 +342,27 @@ $contact = esc_url(home_url('/contact'));
                           }
                           ?>
                         </p>
+                        <!-- カテゴリー表示 -->
                         <div class="voice-card__category-wrap">
                           <?php
-                          // カテゴリーを表示
-                          $categories = get_the_terms(get_the_ID(), 'voice_category'); // カスタムタクソノミー 'voice_category' のカテゴリを取得
-                          if (!empty($categories)) { // カテゴリーが存在する場合のみ処理を実行
-                            foreach ($categories as $category) { // 複数のカテゴリがある場合、それぞれの名前をループで出力
-                              echo '<p class="voice-card__category">' . esc_html($category->name) . '</p>'; // カテゴリ名を出力
+                          $categories = get_the_terms(get_the_ID(), 'voice_category');
+                          if ($categories) {
+                            foreach ($categories as $category) {
+                              echo '<span class="voice-card__category">' . esc_html($category->name) . '</span>';
                             }
                           }
                           ?>
                         </div>
                       </div>
-                      <h3 class="voice-card__title">
-                        <?php the_title(); // 投稿タイトルを出力
-                        ?>
-                      </h3>
+                      <!-- 投稿タイトル -->
+                      <h3 class="voice-card__title"><?php the_title(); ?></h3>
                     </div>
+                    <!-- サムネイル画像 -->
                     <div class="voice-card__img colorbox js-colorbox">
-                      <?php if (has_post_thumbnail()) : // 投稿にサムネイル画像がある場合
-                      ?>
-                        <?php the_post_thumbnail('full'); // サムネイル画像をフルサイズで表示
-                        ?>
-                      <?php else : // サムネイル画像がない場合
-                      ?>
+                      <?php if (has_post_thumbnail()) : ?>
+                        <?php the_post_thumbnail('full'); ?> <!-- サムネイルをフルサイズで表示 -->
+                      <?php else : ?>
+                        <!-- サムネイルがない場合のデフォルト画像 -->
                         <img
                           src="<?php echo get_template_directory_uri(); ?>/assets/images/common/noimage.jpg"
                           alt="noimage"
@@ -370,34 +371,37 @@ $contact = esc_url(home_url('/contact'));
                       <?php endif; ?>
                     </div>
                   </div>
+
                   <div class="voice-card__body">
                     <p class="voice-card__text">
                       <?php
-                      // 投稿本文を取得して220文字以内にトリム
-                      $content = get_the_content(); // 投稿の本文を取得
-                      $content = wp_strip_all_tags($content); // HTMLタグをすべて削除
-                      if (mb_strlen($content, 'UTF-8') > 220) { // 本文が220文字を超える場合
-                        $content = mb_substr($content, 0, 220, 'UTF-8') . '...'; // 220文字に切り取って省略記号を付与
-                      }
-                      echo esc_html($content); // 整形後の本文を出力
+                      // 投稿の本文を取得し、不要なHTMLタグを削除
+                      $content = wp_strip_all_tags(get_the_content());
+
+                      // 文字数が220文字を超える場合は切り取って省略記号を追加
+                      echo mb_strlen($content, 'UTF-8') > 220
+                        ? mb_substr($content, 0, 220, 'UTF-8') . '...'
+                        : esc_html($content);
                       ?>
                     </p>
                   </div>
                 </a>
               </div>
-            <?php endwhile; // 投稿ループ終了
-            wp_reset_postdata(); // クエリをリセットしてグローバル変数を元に戻す
-          else : // 投稿が存在しない場合
+            <?php endwhile;
+            wp_reset_postdata(); // ループ終了後、クエリをリセット
             ?>
-            <p class="no-posts">お客様の声はまだありません。</p> <!-- 投稿がない場合のメッセージを表示 -->
+          <?php else : ?>
+            <!-- 投稿がない場合のメッセージ -->
+            <p class="no-posts">お客様の声はまだありません。</p>
           <?php endif; ?>
         </div>
       </div>
       <div class="voice__button">
-        <a href=<?php echo $voice; ?> class="button">Viewmore<span class="arrow"></span></a> <!-- カスタム投稿タイプ 'voice' のアーカイブページリンクを生成 -->
+        <a href="<?php echo esc_url($voice); ?>" class="button">Viewmore<span class="arrow"></span></a>
       </div>
     </div>
   </section>
+
   <!-- priceセクション -->
   <section class="price top-price">
     <div class="inner">
@@ -408,14 +412,16 @@ $contact = esc_url(home_url('/contact'));
       <div class="price__container">
         <div class="price__contents price-lists">
           <?php
-          // SCFから繰り返しフィールドのデータを取得
-          for ($i = 1; $i <= 10; $i++) {
+          // データを動的に処理
+          $i = 1; // 初期カウンター
+          while (true) {
             // テーブルタイトルと価格データを取得
             $table_title = SCF::get("table_title{$i}", 18); // '18'は投稿ID、必要に応じて変更
             $prices = SCF::get("prices_{$i}", 18);
-            // タイトルがない場合、このテーブルをスキップ（表示しない）
+
+            // テーブルタイトルが空の場合、ループを終了
             if (empty($table_title)) {
-              continue;
+              break;
             }
           ?>
             <div class="price__lists-items">
@@ -428,7 +434,7 @@ $contact = esc_url(home_url('/contact'));
               ?>
                 <dl class="price__list">
                   <?php
-                  foreach ($prices as $price_item) {
+                  foreach ($prices as $price_item) :
                     // 各項目のテキストと価格を取得
                     $text = $price_item["text_{$i}"] ?? '';
                     $price = $price_item["price_{$i}"] ?? '';
@@ -449,24 +455,19 @@ $contact = esc_url(home_url('/contact'));
                         <?php echo esc_html($price); ?>
                       </dd>
                     </div>
-                  <?php
-                  }
-                  ?>
+                  <?php endforeach; ?>
                 </dl>
               <?php endif; ?>
             </div>
           <?php
-          } // for文の終了
+            $i++; // 次のテーブルデータへ進む
+          }
           ?>
         </div>
         <div class="price__photo colorbox js-colorbox">
           <picture>
-            <source
-              srcset="<?php echo get_template_directory_uri(); ?>/assets/images/common/price_sp.jpg"
-              media="(max-width:767px)" />
-            <img
-              src="<?php echo get_template_directory_uri(); ?>/assets/images/common/price.jpg"
-              alt="大きな珊瑚と小さな赤い熱帯魚がたくさんいる" />
+            <source srcset="<?php echo get_template_directory_uri(); ?>/assets/images/common/price_sp.jpg" media="(max-width:767px)" />
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/common/price.jpg" alt="大きな珊瑚と小さな赤い熱帯魚がたくさんいる" />
           </picture>
         </div>
       </div>
@@ -476,6 +477,7 @@ $contact = esc_url(home_url('/contact'));
       </div>
     </div>
   </section>
+
 
 </main>
 <?php get_footer(); ?>

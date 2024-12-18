@@ -39,67 +39,116 @@ $sitemap = esc_url(home_url('/sitemap'));
   <?php wp_body_open(); ?>
   <header class="header">
     <div class="header__inner">
+      <!-- ロゴ -->
       <a href="<?php echo $home; ?>">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/common/logo.png" alt="ロゴ" class="header__logo">
       </a>
+      <!-- ハンバーガーメニュー -->
       <div class="header__hamburger js-hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
       </div>
+      <!-- PCナビ -->
       <nav class="header__pc-nav pc-nav">
         <ul class="pc-nav__items">
-          <?php
-          $menu_items = [
-            'Campaign' => $campaign,
-            'About us' => $about,
-            'Information' => $information,
-            'Blog' => $blog,
-            'Voice' => $voice,
-            'Price' => $price,
-            'FAQ' => $faq,
-            'Contact' => $contact,
-          ];
-          foreach ($menu_items as $label => $link) {
-            echo "<li class='pc-nav__item'>
-                    <a href='$link' class='pc-nav__link'>$label<span>" . esc_html($label) . "</span></a>
-                  </li>";
-          }
-          ?>
+          <li class="pc-nav__item">
+            <a href="<?php echo $campaign; ?>" class="pc-nav__link">Campaign<span>キャンペーン</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $about; ?>" class="pc-nav__link">About us<span>私たちについて</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $information; ?>" class="pc-nav__link">Information<span>ダイビング情報</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $blog; ?>" class="pc-nav__link">Blog<span>ブログ</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $voice; ?>" class="pc-nav__link">Voice<span>お客様の声</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $price; ?>" class="pc-nav__link">Price<span>料金一覧</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $faq; ?>" class="pc-nav__link">FAQ<span>よくある質問</span></a>
+          </li>
+          <li class="pc-nav__item">
+            <a href="<?php echo $contact; ?>" class="pc-nav__link">Contact<span>お問い合わせ</span></a>
+          </li>
         </ul>
       </nav>
     </div>
+
+    <!-- SPナビ -->
     <nav class="header__sp-nav sp-nav js-sp-nav">
       <div class="sp-nav__inner">
         <div class="sp-nav__contents">
           <ul class="sp-nav__items">
-            <li class="sp-nav__item sp-nav__item--main"><a href="<?php echo $campaign; ?>">キャンペーン</a></li>
-            <?php
-            $sp_menu_items = [
-              'ライセンス取得' => $campaign_license,
-              '貸切体験ダイビング' => $campaign_diving,
-              'ナイトダイビング' => $campaign_fun_diving,
-              '私たちについて' => $about,
-              'ダイビング情報' => $information,
-              'ライセンス講習' => "$information#tab1",
-              '体験ダイビング' => "$information#tab3",
-              'ファンダイビング' => "$information#tab2",
-              'ブログ' => $blog,
-              'お客様の声' => $voice,
-              '料金一覧' => $price,
-              'よくある質問' => $faq,
-              'プライバシーポリシー' => $privacypolicy,
-              '利用規約' => $terms,
-              'お問い合わせ' => $contact,
-              'サイトマップ' => $sitemap,
-            ];
-            foreach ($sp_menu_items as $label => $link) {
-              echo "<li class='sp-nav__item'><a href='$link'>$label</a></li>";
-            }
-            ?>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $campaign; ?>"> キャンペーン</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $campaign_license; ?>">ライセンス取得</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $campaign_diving; ?>">貸切体験ダイビング</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $campaign_fun_diving; ?>">ナイトダイビング</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $about; ?>">私たちについて</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $information; ?>">ダイビング情報</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $information; ?>#tab1">ライセンス講習</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $information; ?>#tab3">体験ダイビング</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $information; ?>#tab2">ファンダイビング</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $blog; ?>">ブログ</a>
+            </li>
+          </ul>
+          <ul class="sp-nav__items">
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $voice; ?>">お客様の声</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $price; ?>">料金一覧</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $price; ?>#price1">ライセンス講習</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $price; ?>#price2">体験ダイビング</a>
+            </li>
+            <li class="sp-nav__item">
+              <a href="<?php echo $price; ?>#price3">ファンダイビング</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $faq; ?>">よくある質問</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $privacypolicy; ?>">プライバシー<br />
+                ポリシー</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $terms; ?>">利用規約</a>
+            </li>
+            <li class="sp-nav__item sp-nav__item--main">
+              <a href="<?php echo $contact; ?>">お問い合わせ</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
   </header>
+
 </body>

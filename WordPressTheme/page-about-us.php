@@ -61,13 +61,14 @@ $contact = esc_url(home_url('/contact'));
 // SCFからギャラリー画像リストを取得
 $gallery_photos = SCF::get('gallery_photos', get_the_ID());
 
-// 画像が存在するかをチェック
+// 画像が1枚以上あるかどうかを確認するためのフラグ
 $has_image = false;
 
+// 繰り返しフィールドが空でないかをチェック
 if (!empty($gallery_photos)) {
   // ギャラリー画像リスト内の各フィールドを確認
   foreach ($gallery_photos as $photo) {
-    if (!empty($photo['gallery_photo_pc']) || !empty($photo['gallery_photo_sp'])) {
+    if (!empty($photo['gallery_photo_pc']) ) {
       $has_image = true; // 画像が1枚でもあればフラグをtrueに
       break; // チェックが終わったらループを終了
     }
@@ -111,7 +112,6 @@ if ($has_image) :
     </div>
   </section>
 <?php endif; ?>
-
 
 
 

@@ -24,6 +24,7 @@ $contact = esc_url(home_url('/contact'));
       <?php
       // 現在のタクソノミーまたはカテゴリーIDを取得
       $current_term_id = get_queried_object_id();
+
       // タクソノミー "voice_category" の用語一覧を取得
       $terms = get_terms([
         'taxonomy' => 'voice_category', // カスタムタクソノミーのスラッグ
@@ -31,42 +32,36 @@ $contact = esc_url(home_url('/contact'));
         'order' => 'ASC',              // 昇順
         'hide_empty' => true,          // 投稿がないタクソノミーを非表示
       ]);
-
-      if (!empty($terms) && !is_wp_error($terms)) :
-        // 「すべての投稿(ALL)」用のリンク
-        $all_class = (!$current_term_id || is_post_type_archive('voice')) ? 'active' : ''; // 全投稿の場合
-        echo sprintf(
-          '<a href="%s" class="tags__item %s">ALL</a>',
-          esc_url(get_post_type_archive_link('voice')), // カスタム投稿タイプ 'voice' 全体のリンク
-          esc_attr($all_class)
-        );
-
-        // 各タクソノミー用語のリンクを生成
-        foreach ($terms as $term) {
-          $term_class = ($current_term_id === $term->term_id) ? 'active' : ''; // 選択中のカテゴリーにクラスを付与
-          echo sprintf(
-            '<a href="%s" class="tags__item %s">%s</a>',
-            esc_url(get_term_link($term->term_id, 'voice_category')), // タクソノミー用語へのリンク
-            esc_attr($term_class),                                   // アクティブ状態のクラス
-            esc_html($term->name)                                    // カテゴリー名を表示
-          );
-        }
-      endif;
       ?>
+      <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
+        <!-- 「すべての投稿(ALL)」用のリンク -->
+        <?php
+        // 全ての投稿が選択されているかどうか判定してアクティブクラスを付与
+        $all_class = (!$current_term_id || is_post_type_archive('voice')) ? 'active' : '';
+        ?>
+        <a href="<?php echo esc_url(get_post_type_archive_link('voice')); ?>" class="tags__item <?php echo esc_attr($all_class); ?>">
+          ALL
+        </a>
+
+        <!-- 各タクソノミー用語のリンクを生成 -->
+        <?php foreach ($terms as $term) : ?>
+          <?php
+          // 現在表示しているタクソノミー用語の場合にアクティブクラスを付与
+          $term_class = ($current_term_id === $term->term_id) ? 'active' : '';
+          ?>
+          <a href="<?php echo esc_url(get_term_link($term->term_id, 'voice_category')); ?>" class="tags__item <?php echo esc_attr($term_class); ?>">
+            <?php echo esc_html($term->name); ?>
+          </a>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
 
-    <!-- 投稿カード -->
-    <div class="page-voice-card__container ">
-      <div class="voice-cards">
-        <?php
-        // メインループの開始
-        // 投稿が存在するかを確認
-        if (have_posts()) : ?>
-          <?php
-          // 投稿が存在する間、ループを繰り返す
-          while (have_posts()) : the_post(); // 現在の投稿データをセットアップ
-          ?>
 
+    <!-- 投稿カード -->
+    <div class="page-voice-card__container">
+      <div class="voice-cards">
+        <?php if (have_posts()) : ?>
+          <?php while (have_posts()) : the_post(); ?>
             <div class="voice-cards__item">
               <div class="voice-card">
                 <div class="voice-card__head">
@@ -74,33 +69,28 @@ $contact = esc_url(home_url('/contact'));
                     <div class="voice-card__category-wrapper">
                       <p class="voice-card__age">
                         <?php
-                        // 年齢と性別を取得
                         $age = get_field('age'); // 年齢
                         $sex = get_field('sex'); // 性別
                         echo $age ? esc_html($age) : '年齢情報なし';
-                        echo ' / ';
-                        echo $sex ? esc_html($sex) : '性別情報なし';
+                        if ($sex) {
+                          echo ' (' . esc_html($sex) . ')';
+                        } else {
+                          echo ' (性別情報なし)';
+                        }
                         ?>
                       </p>
                       <div class="voice-card__category-wrap">
                         <?php
-                        // カテゴリーリンクを表示
                         $categories = get_the_terms(get_the_ID(), 'voice_category');
                         if ($categories) {
                           foreach ($categories as $category) {
-                            echo sprintf(
-                              '<a href="%s" class="voice-card__category">%s</a>',
-                              esc_url(get_term_link($category->term_id, 'voice_category')),
-                              esc_html($category->name)
-                            );
+                            echo '<span class="voice-card__category">' . esc_html($category->name) . '</span>';
                           }
                         }
                         ?>
                       </div>
                     </div>
-                    <h3 class="voice-card__title">
-                      <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                    </h3>
+                    <h3 class="voice-card__title"><?php the_title(); ?></h3>
                   </div>
                   <div class="voice-card__img colorbox js-colorbox">
                     <?php if (has_post_thumbnail()) : ?>
@@ -113,29 +103,23 @@ $contact = esc_url(home_url('/contact'));
                 <div class="voice-card__text-info">
                   <p>
                     <?php
-                    // 投稿本文を取得
-                    $content = $post->post_content;
-                    // 不要なタグを削除してテキストのみ取得
-                    $content = wp_strip_all_tags($content);
-                    // 文字数を制限
-                    if (mb_strlen($content, 'UTF-8') > 250) {
-                      // mb_substr: 文字列の一部を取り出す関数
-                      $content = mb_substr($content, 0, 250, 'UTF-8') . '...';
-                    }
-                    echo $content;
+                    $content = wp_strip_all_tags(get_the_content());
+                    echo mb_strlen($content, 'UTF-8') > 250
+                      ? mb_substr($content, 0, 250, 'UTF-8') . '...'
+                      : $content;
                     ?>
                   </p>
                 </div>
               </div>
             </div>
-
           <?php endwhile;
-          wp_reset_postdata();
-        else : ?>
+          wp_reset_postdata(); ?>
+        <?php else : ?>
           <p class="no-posts">お客様の声はまだありません。</p>
         <?php endif; ?>
       </div>
     </div>
+
 
     <!-- ページネーション -->
     <div class="pagination page-blog__pagination">

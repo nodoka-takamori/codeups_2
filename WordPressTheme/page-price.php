@@ -20,14 +20,16 @@ $contact = esc_url(home_url('/contact'));
   <div class="page-price__inner inner">
     <div class="page-price__container price-lists">
       <?php
-      // SCFから繰り返し対象のテーブルデータをループで処理
-      for ($i = 1; $i <= 10; $i++) {
+      // データを動的に処理
+      $i = 1; // 初期カウンター
+      while (true) {
         // テーブルタイトルと価格データを取得
-        $table_title = SCF::get("table_title{$i}");
-        $prices = SCF::get("prices_{$i}");
-        // タイトルがない場合はスキップ（表示しない）
+        $table_title = SCF::get("table_title{$i}", 18); // '18'は投稿ID、必要に応じて変更
+        $prices = SCF::get("prices_{$i}", 18);
+
+        // テーブルタイトルが空の場合、ループを終了
         if (empty($table_title)) {
-          continue;
+          break;
         }
       ?>
         <div class="price-lists__item price-list">
@@ -35,19 +37,19 @@ $contact = esc_url(home_url('/contact'));
             <?php echo esc_html($table_title); ?>
           </h2>
           <!-- 価格データが存在する場合のみテーブルを表示 -->
-          <?php if (!empty($prices)) : ?>
+          <?php if (!empty($table_title)) : ?>
             <table class="price-list__table">
               <tbody>
-                <?php foreach ($prices as $price_item) : ?>
-                  <?php
-                  // text_{$i} と price_{$i} のどちらかが空ならその行をスキップ
+                <?php
+                foreach ($prices as $price_item) :
+                  // 各項目のテキストと価格を取得
                   $text = $price_item["text_{$i}"] ?? '';
                   $price = $price_item["price_{$i}"] ?? '';
                   // テキストまたは価格が空の場合、この行をスキップ（表示しない）
                   if (empty($text) || empty($price)) {
                     continue;
                   }
-                  ?>
+                ?>
                   <tr>
                     <td class="price-list__sub-title">
                       <?php
@@ -66,11 +68,15 @@ $contact = esc_url(home_url('/contact'));
           <?php endif; ?>
         </div>
       <?php
+        $i++; // 次のテーブルデータへ進む
       }
       ?>
     </div>
   </div>
 </div>
+
+
+
 
 
 
