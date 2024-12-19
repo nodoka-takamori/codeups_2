@@ -20,16 +20,14 @@ $contact = esc_url(home_url('/contact'));
   <div class="page-price__inner inner">
     <div class="page-price__container price-lists">
       <?php
-      // データを動的に処理
-      $i = 1; // 初期カウンター
-      while (true) {
+      // SCFから繰り返し対象のテーブルデータをループで処理
+      for ($i = 1; $i <= 10; $i++) {
         // テーブルタイトルと価格データを取得
-        $table_title = SCF::get("table_title{$i}", 18); // '18'は投稿ID、必要に応じて変更
-        $prices = SCF::get("prices_{$i}", 18);
-
-        // テーブルタイトルが空の場合、ループを終了
+        $table_title = SCF::get("table_title{$i}");
+        $prices = SCF::get("prices_{$i}");
+        // タイトルがない場合はスキップ（表示しない）
         if (empty($table_title)) {
-          break;
+          continue;
         }
       ?>
         <div class="price-lists__item price-list">
@@ -37,11 +35,11 @@ $contact = esc_url(home_url('/contact'));
             <?php echo esc_html($table_title); ?>
           </h2>
           <!-- 価格データが存在する場合のみテーブルを表示 -->
-          <?php if (!empty($table_title)) : ?>
+          <?php if (!empty($prices)) : ?>
             <table class="price-list__table">
               <tbody>
-                <?php
-                foreach ($prices as $price_item) :
+                <?php foreach ($prices as $price_item) : ?>
+                  <?php
                   // 各項目のテキストと価格を取得
                   $text = $price_item["text_{$i}"] ?? '';
                   $price = $price_item["price_{$i}"] ?? '';
@@ -49,7 +47,7 @@ $contact = esc_url(home_url('/contact'));
                   if (empty($text) || empty($price)) {
                     continue;
                   }
-                ?>
+                  ?>
                   <tr>
                     <td class="price-list__sub-title">
                       <?php
@@ -68,16 +66,11 @@ $contact = esc_url(home_url('/contact'));
           <?php endif; ?>
         </div>
       <?php
-        $i++; // 次のテーブルデータへ進む
-      }
+      } // for文の終了
       ?>
     </div>
   </div>
 </div>
-
-
-
-
 
 
 <?php get_footer(); ?>

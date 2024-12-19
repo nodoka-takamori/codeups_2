@@ -412,16 +412,14 @@ $contact = esc_url(home_url('/contact'));
       <div class="price__container">
         <div class="price__contents price-lists">
           <?php
-          // データを動的に処理
-          $i = 1; // 初期カウンター
-          while (true) {
+          // SCFから繰り返しフィールドのデータを取得
+          for ($i = 1; $i <= 10; $i++) {
             // テーブルタイトルと価格データを取得
             $table_title = SCF::get("table_title{$i}", 18); // '18'は投稿ID、必要に応じて変更
             $prices = SCF::get("prices_{$i}", 18);
-
-            // テーブルタイトルが空の場合、ループを終了
+            // タイトルがない場合、このテーブルをスキップ（表示しない）
             if (empty($table_title)) {
-              break;
+              continue;
             }
           ?>
             <div class="price__lists-items">
@@ -434,7 +432,8 @@ $contact = esc_url(home_url('/contact'));
               ?>
                 <dl class="price__list">
                   <?php
-                  foreach ($prices as $price_item) :
+                  foreach ($prices as $price_item) : ?>
+                    <?php
                     // 各項目のテキストと価格を取得
                     $text = $price_item["text_{$i}"] ?? '';
                     $price = $price_item["price_{$i}"] ?? '';
@@ -442,7 +441,7 @@ $contact = esc_url(home_url('/contact'));
                     if (empty($text) || empty($price)) {
                       continue;
                     }
-                  ?>
+                    ?>
                     <div class="price__list-item">
                       <dt>
                         <?php
@@ -460,10 +459,10 @@ $contact = esc_url(home_url('/contact'));
               <?php endif; ?>
             </div>
           <?php
-            $i++; // 次のテーブルデータへ進む
-          }
+          } // for文の終了
           ?>
         </div>
+
         <div class="price__photo colorbox js-colorbox">
           <picture>
             <source srcset="<?php echo get_template_directory_uri(); ?>/assets/images/common/price_sp.jpg" media="(max-width:767px)" />
